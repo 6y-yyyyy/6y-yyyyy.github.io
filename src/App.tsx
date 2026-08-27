@@ -123,7 +123,7 @@ export default function App() {
                 }}
               >
                 <Button icon={<MenuOutlined />} onClick={() => setDrawerOpen(true)} />
-                <span style={{ display: "flex", alignItems: "center", gap: 4, fontWeight: 700, color: "var(--accent)" }}>
+                <span style={{ display: "flex", alignItems: "center", gap: 4, fontWeight: 700, fontSize: 19, color: "var(--accent)" }}>
                   <SiDatadog />
                   你赢成长记
                 </span>
