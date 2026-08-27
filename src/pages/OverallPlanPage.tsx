@@ -14,7 +14,7 @@ export default function OverallPlanPage() {
 
   return (
     <div style={{ maxWidth: 720, margin: "0 auto" }}>
-      <Card title={<div style={{ textAlign: "center", fontSize: 18, fontWeight: 700 }}>学习整体计划</div>}>
+      <Card title={<div style={{ textAlign: "center", fontSize: 18, fontWeight: 700 }}>升级路线</div>}>
         {/* 总进度 */}
         <Progress percent={Math.round((totalDone / totalItems) * 100)} status="active" />
         <p style={{ color: "var(--text-secondary)", fontSize: 12 }}>

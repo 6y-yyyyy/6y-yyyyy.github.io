@@ -17,10 +17,10 @@ const { Sider, Content } = Layout;
 type PageKey = "current" | "overall" | "contributions" | "completed";
 
 const MENU_ITEMS = [
-  { key: "current", icon: <ReadOutlined />, label: "当前学习部分" },
-  { key: "overall", icon: <ApartmentOutlined />, label: "学习整体计划" },
-  { key: "contributions", icon: <CalendarOutlined />, label: "每日贡献" },
-  { key: "completed", icon: <HistoryOutlined />, label: "已学任务" },
+  { key: "current", icon: <ReadOutlined />, label: "主线任务" },
+  { key: "overall", icon: <ApartmentOutlined />, label: "升级路线" },
+  { key: "contributions", icon: <CalendarOutlined />, label: "肝帝日历" },
+  { key: "completed", icon: <HistoryOutlined />, label: "战绩" },
 ];
 
 export default function App() {

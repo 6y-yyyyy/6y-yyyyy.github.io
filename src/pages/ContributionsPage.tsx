@@ -110,7 +110,7 @@ export default function ContributionsPage() {
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto" }}>
-      <Card title={<div style={{ textAlign: "center", fontSize: 18, fontWeight: 700 }}>每日贡献</div>}>
+      <Card title={<div style={{ textAlign: "center", fontSize: 18, fontWeight: 700 }}>肝帝日历</div>}>
         <Space style={{ marginBottom: 16, flexWrap: "wrap" }}>
           <Button icon={<LeftOutlined />} onClick={() => shift(-1)} />
           <Select

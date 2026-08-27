@@ -19,9 +19,9 @@ export default function CompletedPage() {
 
   return (
     <div style={{ maxWidth: 720, margin: "0 auto" }}>
-      <Card title={<div style={{ textAlign: "center", fontSize: 18, fontWeight: 700 }}>已学任务</div>}>
+      <Card title={<div style={{ textAlign: "center", fontSize: 18, fontWeight: 700 }}>战绩</div>}>
         {sorted.length === 0 ? (
-          <Empty description="还没有完成记录，去「当前学习部分」勾选一个任务吧" />
+          <Empty description="还没有战绩，去「主线任务」勾选一个任务吧" />
         ) : (
           <>
             <p style={{ color: "var(--text-secondary)", fontSize: 12, textAlign: "center", marginTop: -8 }}>
