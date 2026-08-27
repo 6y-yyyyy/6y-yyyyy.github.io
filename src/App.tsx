@@ -2,23 +2,25 @@ import { useState } from "react";
 import type { CSSProperties } from "react";
 import { Layout, Menu, Grid, Button, Drawer, ConfigProvider } from "antd";
 import zhCN from "antd/locale/zh_CN";
-import { MenuOutlined, ReadOutlined, ApartmentOutlined, CalendarOutlined } from "@ant-design/icons";
+import { MenuOutlined, ReadOutlined, ApartmentOutlined, CalendarOutlined, HistoryOutlined } from "@ant-design/icons";
 import { SiDatadog } from "react-icons/si";
 import { MdWbSunny } from "react-icons/md";
 import { FaMoon } from "react-icons/fa";
 import CurrentPartPage from "./pages/CurrentPartPage";
 import OverallPlanPage from "./pages/OverallPlanPage";
 import ContributionsPage from "./pages/ContributionsPage";
+import CompletedPage from "./pages/CompletedPage";
 import { THEMES, type ThemeKey } from "./themes";
 
 const { Sider, Content } = Layout;
 
-type PageKey = "current" | "overall" | "contributions";
+type PageKey = "current" | "overall" | "contributions" | "completed";
 
 const MENU_ITEMS = [
   { key: "current", icon: <ReadOutlined />, label: "当前学习部分" },
   { key: "overall", icon: <ApartmentOutlined />, label: "学习整体计划" },
   { key: "contributions", icon: <CalendarOutlined />, label: "每日贡献" },
+  { key: "completed", icon: <HistoryOutlined />, label: "已学任务" },
 ];
 
 export default function App() {
@@ -145,6 +147,7 @@ export default function App() {
             {page === "current" && <CurrentPartPage />}
             {page === "overall" && <OverallPlanPage />}
             {page === "contributions" && <ContributionsPage />}
+            {page === "completed" && <CompletedPage />}
           </Content>
         </Layout>
       </div>

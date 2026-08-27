@@ -207,3 +207,12 @@ export const PLAN: Part[] = [
 export function partDone(doneIds: string[], part: Part): boolean {
   return part.items.every((it) => doneIds.includes(it.id));
 }
+
+// 根据 id 找到某个学习项及其所属部分（用于记录完成日志）
+export function findItem(id: string): { partTitle: string; itemTitle: string } | undefined {
+  for (const part of PLAN) {
+    const item = part.items.find((it) => it.id === id);
+    if (item) return { partTitle: part.title, itemTitle: item.title };
+  }
+  return undefined;
+}
