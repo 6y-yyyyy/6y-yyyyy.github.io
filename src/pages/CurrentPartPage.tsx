@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Card, List, Button, Tag, Collapse, Empty, Select, Space } from "antd";
-import { CheckCircleOutlined, LinkOutlined, CodeOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, LinkOutlined, CodeOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import { PLAN } from "../data/plan";
 import { useStore } from "../store";
 
@@ -64,11 +64,29 @@ export default function CurrentPartPage() {
                   <div style={{ flex: 1 }}>
                     <div
                       style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: 8,
                         textDecoration: done ? "line-through" : "none",
                         color: done ? "var(--text-secondary)" : "var(--text)",
                       }}
                     >
-                      {item.title}
+                      <span>{item.title}</span>
+                      {item.time && (
+                        <span
+                          style={{
+                            fontSize: 12,
+                            color: "var(--text-secondary)",
+                            whiteSpace: "nowrap",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 2,
+                          }}
+                        >
+                          <ClockCircleOutlined /> {item.time}
+                        </span>
+                      )}
                     </div>
 
                     {/* 资料 + 小项目 */}
