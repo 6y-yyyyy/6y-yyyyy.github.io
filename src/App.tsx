@@ -2,10 +2,11 @@ import { useState } from "react";
 import type { CSSProperties } from "react";
 import { Layout, Menu, Grid, Button, Drawer, ConfigProvider } from "antd";
 import zhCN from "antd/locale/zh_CN";
-import { MenuOutlined, ReadOutlined, ApartmentOutlined, CalendarOutlined, HistoryOutlined } from "@ant-design/icons";
+import { MenuOutlined, ApartmentOutlined, CalendarOutlined, HistoryOutlined } from "@ant-design/icons";
 import { SiDatadog } from "react-icons/si";
 import { MdWbSunny } from "react-icons/md";
 import { FaMoon } from "react-icons/fa";
+import { TbSwords } from "react-icons/tb";
 import CurrentPartPage from "./pages/CurrentPartPage";
 import OverallPlanPage from "./pages/OverallPlanPage";
 import ContributionsPage from "./pages/ContributionsPage";
@@ -17,7 +18,7 @@ const { Sider, Content } = Layout;
 type PageKey = "current" | "overall" | "contributions" | "completed";
 
 const MENU_ITEMS = [
-  { key: "current", icon: <ReadOutlined />, label: "主线任务" },
+  { key: "current", icon: <TbSwords />, label: "主线任务" },
   { key: "overall", icon: <ApartmentOutlined />, label: "升级路线" },
   { key: "contributions", icon: <CalendarOutlined />, label: "肝帝日历" },
   { key: "completed", icon: <HistoryOutlined />, label: "战绩" },
