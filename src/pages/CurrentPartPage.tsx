@@ -64,24 +64,18 @@ export default function CurrentPartPage() {
                   <div style={{ flex: 1 }}>
                     <div
                       style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        gap: 8,
                         textDecoration: done ? "line-through" : "none",
                         color: done ? "var(--text-secondary)" : "var(--text)",
                       }}
                     >
-                      <span>{item.title}</span>
+                      {item.title}
                       {item.time && (
                         <span
                           style={{
+                            marginLeft: 8,
                             fontSize: 12,
                             color: "var(--text-secondary)",
                             whiteSpace: "nowrap",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 2,
                           }}
                         >
                           <ClockCircleOutlined /> {item.time}
