@@ -34,7 +34,6 @@ export const CALENDAR_WEEKS: CalendarWeek[] = WEEK_STARTS.map((start, index) => 
 }));
 
 export const CALENDAR_EVENTS: CalendarEvent[] = [
-  { id: "summer-vacation", date: "2026-07-13 — 09-05", title: "学生暑假", detail: "共55天" },
   { id: "staff-return", date: "2026-09-03 — 09-04", title: "教职工返校", detail: "党政管理人员9月3、4日返校上班；教师9月4日返校上班" },
   { id: "return-and-class", date: "2026-09-06 — 09-07", title: "返校与正式上课", detail: "2023、2024、2025级学生9月6日前回校报到，9月7日正式上课" },
   { id: "new-students", date: "2026-09-12 — 09-13", title: "2026级新生报到", detail: "普通本科新生9月12、13日报到；第二学士学位学生9月6日报到" },
