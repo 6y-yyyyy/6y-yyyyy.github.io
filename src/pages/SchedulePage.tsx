@@ -28,7 +28,7 @@ export default function SchedulePage() {
       <div className="course-detail"><ReadOutlined /><span>第{formatNumberRange(course.periods)}大节 · 第{formatNumberRange(course.sections)}小节</span></div>
       <div className="course-weeks">上课周次：第{formatNumberRange(course.weeks)}周{course.weeks.length === 8 && course.weeks[0] === 2 ? "（双周）" : ""}</div>
     </Card>)}</div>}
-    {inTerm && schedule.courses.length === 0 && <div className="schedule-empty"><Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="今天没有课 🎉" /></div>}
+    {inTerm && schedule.courses.length === 0 && <div className="schedule-empty"><Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="自由的一天~" /></div>}
     {!inTerm && <div className="schedule-empty"><Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="当前不在本学期教学周期内" /></div>}
   </main>;
 }
