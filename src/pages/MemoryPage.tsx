@@ -26,7 +26,7 @@ export default function MemoryPage() {
   const collection = collected.map((id) => allUnits.find((unit) => unit.id === id)).filter((unit): unit is KnowledgeUnit => Boolean(unit));
   const explained = (unit: KnowledgeUnit) => notes.some((note) => note.topic === unit.duck.question);
   const profileContent = <div className="collection-grid">{PROFILE_KNOWLEDGE.map((unit) => <KnowledgeCard key={unit.id} unit={unit} collected={collected.includes(unit.id)} explained={explained(unit)}/>)}</div>;
-  const collectionContent = collection.length === 0 ? <Card><Empty description="还没有收藏知识卡，去勇者训练营翻一张吧"/></Card> : <div className="collection-grid">{collection.map((unit) => <KnowledgeCard key={unit.id} unit={unit} collected explained={explained(unit)} onRemove={() => setCollected((ids) => ids.filter((id) => id !== unit.id))}/>)}</div>;
+  const collectionContent = collection.length === 0 ? <Card><Empty description="还没有收藏知识卡"/></Card> : <div className="collection-grid">{collection.map((unit) => <KnowledgeCard key={unit.id} unit={unit} collected explained={explained(unit)} onRemove={() => setCollected((ids) => ids.filter((id) => id !== unit.id))}/>)}</div>;
   const learnedContent = learned.length === 0 ? <Card><Empty description="完成第一个主线任务后，这里会出现正式解锁的知识"/></Card> : <div className="collection-grid">{learned.map((unit) => <KnowledgeCard key={unit.id} unit={unit} collected={collected.includes(unit.id)} explained={explained(unit)}/>)}</div>;
 
   return <main className="page-shell">

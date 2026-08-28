@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Card, Progress, Tag } from "antd";
+import { Button, Card, Tag } from "antd";
 import { CheckOutlined, CodeOutlined, FireOutlined, RocketOutlined } from "@ant-design/icons";
 import { todayStr, useStore } from "../store";
 
@@ -29,6 +29,5 @@ export default function DailyChallengePage() {
     <section className="challenge-hero"><div><span className="eyebrow">DAILY SIDE QUEST</span><h1>今天也去打一个怪</h1><p>主线练项目，支线练基本功。每天一道就够，关键是别断线。</p></div><div className="streak-orb"><FireOutlined /><strong>{days.length}</strong><span>累计打怪天数</span></div></section>
     <div className="daily-goal"><div><strong>{done ? "今日支线已完成" : `今日支线：去${platform}至少完成 1 题`}</strong><p>{done ? `“今天上${platform}打怪”已加入战绩。` : "点击下方卡片选择战场，独立思考 20 分钟后再看题解。"}</p></div><Button type={done ? "default" : "primary"} size="large" icon={<CheckOutlined />} onClick={markDone}>{done ? "取消今日记录" : "今日已打怪"}</Button></div>
     <div className="arena-grid">{arenas.map((arena) => <a className={`arena-card ${arena.className} ${platform === arena.name ? "is-selected" : ""}`} key={arena.name} href={arena.url} target="_blank" rel="noreferrer" onClick={() => setPlatform(arena.name)}><Card><div className="arena-icon">{arena.icon}</div><Tag>{platform === arena.name ? `已选择 · ${arena.name}` : arena.name}</Tag><h2>{arena.line}</h2><p>{arena.note}</p><span className="enter-arena">进入战场 →</span></Card></a>)}</div>
-    <Card className="algorithm-rule" title="打怪规则"><div className="rule-steps"><span><b>01</b>读懂题目，写下输入输出</span><span><b>02</b>独立思考至少 20 分钟</span><span><b>03</b>通过后复述思路与复杂度</span></div><Progress percent={done ? 100 : 0} status={done ? "success" : "active"} format={() => done ? "今日完成" : "等待出战"} /></Card>
   </main>;
 }
