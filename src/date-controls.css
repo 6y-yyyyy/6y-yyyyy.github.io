@@ -38,3 +38,18 @@
     min-width: 0;
   }
 }
+
+.course-detail {
+  line-height: 22px;
+}
+
+.course-detail > .anticon {
+  display: inline-flex;
+  width: 20px;
+  height: 22px;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  color: var(--accent);
+  line-height: 22px;
+}
