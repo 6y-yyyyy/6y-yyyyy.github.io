@@ -1,21 +1,56 @@
 import { useState, type CSSProperties } from "react";
 import { Layout, Menu, Grid, Button, Drawer, ConfigProvider } from "antd";
 import zhCN from "antd/locale/zh_CN";
-import { MenuOutlined, ApartmentOutlined, CalendarOutlined, HistoryOutlined, FireOutlined } from "@ant-design/icons";
+import { ApartmentOutlined, BugOutlined, CalendarOutlined, DatabaseOutlined, ExperimentOutlined, FireOutlined, HistoryOutlined, HomeOutlined, MenuOutlined, ProjectOutlined } from "@ant-design/icons";
 import { SiDatadog } from "react-icons/si";
 import { MdWbSunny } from "react-icons/md";
 import { FaMoon } from "react-icons/fa";
 import { TbSwords } from "react-icons/tb";
+import DashboardPage from "./pages/DashboardPage";
 import CurrentPartPage from "./pages/CurrentPartPage";
+import DailyChallengePage from "./pages/DailyChallengePage";
+import BestiaryPage from "./pages/BestiaryPage";
+import ShowcasePage from "./pages/ShowcasePage";
+import TrainingPage from "./pages/TrainingPage";
+import MemoryPage from "./pages/MemoryPage";
 import OverallPlanPage from "./pages/OverallPlanPage";
 import ContributionsPage from "./pages/ContributionsPage";
 import CompletedPage from "./pages/CompletedPage";
-import DailyChallengePage from "./pages/DailyChallengePage";
 import { THEMES, type ThemeKey } from "./themes";
+
 const { Sider, Content } = Layout;
-type PageKey = "current" | "challenge" | "overall" | "contributions" | "completed";
-const MENU_ITEMS = [{ key:"current",icon:<TbSwords/>,label:"主线任务"},{key:"challenge",icon:<FireOutlined/>,label:"每日打怪"},{key:"overall",icon:<ApartmentOutlined/>,label:"升级路线"},{key:"contributions",icon:<CalendarOutlined/>,label:"学习日历"},{key:"completed",icon:<HistoryOutlined/>,label:"战绩复盘"}];
-export default function App(){const screens=Grid.useBreakpoint();const mobile=!screens.md;const[page,setPage]=useState<PageKey>("current");const[drawer,setDrawer]=useState(false);const[themeKey,setThemeKey]=useState<ThemeKey>("dune");const[collapsed,setCollapsed]=useState(false);const theme=THEMES.find(t=>t.key===themeKey)!;const width=collapsed?80:210;
- const menu=<Menu mode="inline" selectedKeys={[page]} items={MENU_ITEMS} style={{background:"transparent"}} onClick={e=>{setPage(e.key as PageKey);setDrawer(false)}}/>;
- const themeButton=<Button aria-label="切换明暗主题" type="text" onClick={()=>setThemeKey(themeKey==="dune"?"monochrome-print":"dune")} icon={themeKey==="dune"?<MdWbSunny/>:<FaMoon/>}/>;
- return <ConfigProvider locale={zhCN} theme={theme.antd}><div style={theme.vars as CSSProperties}><Layout style={{minHeight:"100vh"}}>{!mobile&&<Sider collapsible collapsed={collapsed} onCollapse={setCollapsed} width={210} collapsedWidth={80} theme="light" style={{position:"fixed",height:"100vh",left:0,top:0,borderRight:"1px solid var(--border)",background:"var(--card-bg)"}}><div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"16px 14px",color:"var(--accent)",fontWeight:800,fontSize:17}}>{collapsed?<SiDatadog/>:<><span style={{display:"flex",gap:6,alignItems:"center"}}><SiDatadog/>你赢成长记</span>{themeButton}</>}</div>{menu}</Sider>}{mobile&&<><header style={{position:"fixed",zIndex:10,top:0,left:0,right:0,height:54,padding:"8px 14px",display:"flex",alignItems:"center",gap:10,background:"var(--card-bg)",borderBottom:"1px solid var(--border)"}}><Button aria-label="打开菜单" icon={<MenuOutlined/>} onClick={()=>setDrawer(true)}/><strong style={{display:"flex",alignItems:"center",gap:5,color:"var(--accent)"}}><SiDatadog/>你赢成长记</strong><span style={{marginLeft:"auto"}}>{themeButton}</span></header><Drawer title="冒险菜单" open={drawer} onClose={()=>setDrawer(false)} placement="left" width={240}>{menu}</Drawer></>}<Content style={{padding:mobile?"70px 14px 28px":"28px",marginLeft:mobile?0:width,transition:"margin .2s"}}>{page==="current"&&<CurrentPartPage/>}{page==="challenge"&&<DailyChallengePage/>}{page==="overall"&&<OverallPlanPage/>}{page==="contributions"&&<ContributionsPage/>}{page==="completed"&&<CompletedPage/>}</Content></Layout></div></ConfigProvider>}
+type PageKey = "dashboard" | "current" | "challenge" | "training" | "memory" | "bestiary" | "showcase" | "overall" | "contributions" | "completed";
+const MENU_ITEMS = [
+  { key: "dashboard", icon: <HomeOutlined />, label: "今日冒险" },
+  { key: "current", icon: <TbSwords />, label: "主线任务" },
+  { key: "challenge", icon: <FireOutlined />, label: "每日打怪" },
+  { key: "training", icon: <ExperimentOutlined />, label: "勇者训练营" },
+  { key: "memory", icon: <DatabaseOutlined />, label: "专属记忆库" },
+  { key: "bestiary", icon: <BugOutlined />, label: "怪物图鉴" },
+  { key: "showcase", icon: <ProjectOutlined />, label: "作品陈列柜" },
+  { key: "overall", icon: <ApartmentOutlined />, label: "升级路线" },
+  { key: "contributions", icon: <CalendarOutlined />, label: "学习日历" },
+  { key: "completed", icon: <HistoryOutlined />, label: "战绩复盘" },
+];
+
+export default function App() {
+  const mobile = !Grid.useBreakpoint().md;
+  const [page, setPage] = useState<PageKey>("dashboard");
+  const [drawer, setDrawer] = useState(false);
+  const [themeKey, setThemeKey] = useState<ThemeKey>("dune");
+  const [collapsed, setCollapsed] = useState(false);
+  const theme = THEMES.find((item) => item.key === themeKey)!;
+  const width = collapsed ? 80 : 210;
+  const navigate = (target: PageKey) => { setPage(target); setDrawer(false); };
+  const menu = <Menu mode="inline" selectedKeys={[page]} items={MENU_ITEMS} style={{ background: "transparent" }} onClick={(event) => navigate(event.key as PageKey)} />;
+  const themeButton = <Button aria-label="切换主题" type="text" onClick={() => setThemeKey(themeKey === "dune" ? "monochrome-print" : "dune")} icon={themeKey === "dune" ? <MdWbSunny /> : <FaMoon />} />;
+
+  return <ConfigProvider locale={zhCN} theme={theme.antd}><div style={theme.vars as CSSProperties}><Layout style={{ minHeight: "100vh" }}>
+    {!mobile && <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed} width={210} collapsedWidth={80} theme="light" style={{ position: "fixed", height: "100vh", left: 0, top: 0, overflow: "auto", borderRight: "1px solid var(--border)", background: "var(--card-bg)" }}><div className="brand">{collapsed ? <SiDatadog /> : <><span><SiDatadog />你赢历险记</span>{themeButton}</>}</div>{menu}</Sider>}
+    {mobile && <><header className="mobile-header"><Button aria-label="打开菜单" icon={<MenuOutlined />} onClick={() => setDrawer(true)} /><strong><SiDatadog />你赢历险记</strong><span>{themeButton}</span></header><Drawer title="冒险菜单" open={drawer} onClose={() => setDrawer(false)} placement="left" width={240}>{menu}</Drawer></>}
+    <Content style={{ padding: mobile ? "70px 14px 28px" : "28px", marginLeft: mobile ? 0 : width, transition: "margin .2s" }}>
+      {page === "dashboard" && <DashboardPage onNavigate={(target) => navigate(target)} />}
+      {page === "current" && <CurrentPartPage />}{page === "challenge" && <DailyChallengePage />}{page === "training" && <TrainingPage />}{page === "memory" && <MemoryPage />}{page === "bestiary" && <BestiaryPage />}{page === "showcase" && <ShowcasePage />}{page === "overall" && <OverallPlanPage />}{page === "contributions" && <ContributionsPage />}{page === "completed" && <CompletedPage />}
+    </Content>
+  </Layout></div></ConfigProvider>;
+}

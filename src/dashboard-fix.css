@@ -1,0 +1,14 @@
+.today-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.title-line {
+  display: block;
+}
+
+.today-actions .ant-btn {
+  margin-top: 0;
+  flex: 1;
+}

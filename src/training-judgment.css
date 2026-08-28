@@ -1,0 +1,14 @@
+.duck-checkpoints {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin: 14px 0 16px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.duck-feedback {
+  margin-top: 12px;
+  text-align: left;
+}

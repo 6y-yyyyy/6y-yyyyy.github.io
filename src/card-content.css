@@ -1,0 +1,22 @@
+.card-pool-tip {
+  max-width: 520px;
+  margin: 18px auto 0;
+  text-align: left;
+}
+
+.knowledge-points {
+  display: grid;
+  gap: 7px;
+  width: 100%;
+  text-align: left;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.knowledge-points > span {
+  position: static;
+  display: block;
+  border: 0;
+  border-radius: 0;
+}

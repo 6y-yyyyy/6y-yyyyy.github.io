@@ -3,7 +3,27 @@ export type LearningItem = { id: string; title: string; time: string; outcome: s
 export type Part = { id: string; title: string; level: string; summary: string; milestone: string; bossBattle: string; bossCriteria: string[]; retrospective: string[]; items: LearningItem[] };
 const docs = (title: string, url: string): Resource[] => [{ title, url, type: "文档" }];
 
+export const PROJECT_WORKFLOW = ["一句话定义问题", "列出必须功能", "画页面草图", "设计数据结构", "拆分开发顺序", "逐项实现", "补齐边界状态", "手机端验收", "构建并提交 Git", "写下复盘"];
+
 export const PLAN: Part[] = [
+  {
+    id: "p0", level: "LV.00", title: "基础唤醒与项目启程",
+    summary: "不重看整套网课，用短练习唤醒 HTML、CSS 和 JavaScript，并第一次走完整项目流程。",
+    milestone: "能不跟视频逐行复制，独立完成一个响应式页面和一个原生 JavaScript Todo List。",
+    bossBattle: "原生 JavaScript Todo List：从需求清单、页面草图、数据结构到开发、调试、Git 提交和验收。",
+    bossCriteria: ["新增、完成、删除与三种筛选可用", "刷新后任务仍在", "有空状态和表单校验", "360px 下无横向滚动", "至少 5 个表达意图的 Git 提交", "能解释数据、事件和页面更新的完整流程"],
+    retrospective: ["项目开始前先做了哪三件事？", "最常见的错误来自语法、数据还是 DOM？", "哪部分仍需要看资料才能完成？", "如果重做一次，会怎样调整开发顺序？"],
+    items: [
+      { id: "p0-1", title: "HTML 语义化、表单与可访问性唤醒", time: "1 天", outcome: "能选择合适的页面标签，并写出有 label、校验和合理按钮类型的表单。", resources: docs("MDN：HTML 入门", "https://developer.mozilla.org/zh-CN/docs/Learn_web_development/Core/Structuring_content"), miniProject: "做一个包含导航、个人介绍、项目卡片和联系表单的页面骨架。", passCriteria: ["不全部使用 div", "图片有 alt", "输入框有关联 label", "键盘可以完成表单操作"], aiLevel: 1, aiRule: "可以查标签用途；页面结构先自己决定，AI 只做可访问性检查。" },
+      { id: "p0-2", title: "盒模型、优先级与定位复健", time: "1–2 天", outcome: "能解释元素真实尺寸、样式覆盖原因和 absolute 的定位参照物。", resources: docs("MDN：CSS 盒模型", "https://developer.mozilla.org/zh-CN/docs/Learn_web_development/Core/Styling_basics/Box_model"), miniProject: "还原一张带角标、头像和按钮的个人资料卡。", passCriteria: ["正确使用 border-box", "不靠乱加 margin 对齐", "能说出角标相对谁定位", "能用 DevTools 找到覆盖样式"], aiLevel: 1, aiRule: "先用 DevTools 检查盒模型和样式来源，再向 AI 验证结论。" },
+      { id: "p0-3", title: "Flex、Grid 与响应式布局唤醒", time: "2 天", outcome: "能选择一维或二维布局，并通过媒体查询完成手机端重排。", resources: docs("MDN：CSS 布局", "https://developer.mozilla.org/zh-CN/docs/Learn_web_development/Core/CSS_layout"), miniProject: "把个人介绍页完善为响应式作品卡片墙。", passCriteria: ["Flex 居中属性能独立写出", "桌面多列、手机单列", "360px 无横向滚动", "不使用固定页面高度"], aiLevel: 1, aiRule: "AI 可以给验收尺寸，不直接生成整套 CSS。" },
+      { id: "p0-4", title: "JavaScript 变量、函数与流程控制", time: "2–3 天", outcome: "能独立使用变量、条件、循环、函数与 return 组织小段逻辑。", resources: docs("MDN：JavaScript 基础", "https://developer.mozilla.org/zh-CN/docs/Learn_web_development/Core/Scripting"), miniProject: "完成价格计算器：输入数量和折扣，校验后输出结果。", passCriteria: ["能区分 let 与 const", "函数有明确输入输出", "覆盖非法输入", "不用复制整段答案"], aiLevel: 1, aiRule: "AI 只出测试数据和提示错误位置，逻辑必须自己完成。" },
+      { id: "p0-5", title: "数组、对象、引用与常用数组方法", time: "3 天", outcome: "理解对象引用，能用 map、filter、find 和 reduce 处理真实数据。", resources: docs("MDN：数组", "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array"), miniProject: "把任务数据完成新增、筛选、统计和不可变更新。", passCriteria: ["知道赋值为何可能共享数组", "map 与 forEach 不再混淆", "筛选不修改原数组", "能处理空数组"], aiLevel: 1, aiRule: "可以让 AI 生成练习数据，数组处理过程由自己写。" },
+      { id: "p0-6", title: "DOM、事件冒泡与页面渲染", time: "3–4 天", outcome: "能查询元素、监听事件、根据数组数据重新渲染页面。", resources: docs("MDN：DOM 脚本", "https://developer.mozilla.org/zh-CN/docs/Learn_web_development/Core/Scripting/DOM_scripting"), miniProject: "制作原生 JavaScript 任务列表的新增、完成和删除功能。", passCriteria: ["使用 querySelector 和 addEventListener", "能解释事件冒泡", "列表由数据生成而非复制 HTML", "空数据时显示提示"], aiLevel: 2, aiRule: "遇到 Bug 先查控制台和事件 target，15 分钟后再让 AI 提示。" },
+      { id: "p0-7", title: "现代语法、模块与 localStorage", time: "2–3 天", outcome: "会使用解构、展开、模板字符串、import/export，并能安全保存本地数据。", resources: docs("MDN：JavaScript 模块", "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Modules"), miniProject: "把 Todo 拆成数据、存储和界面模块，并加入刷新持久化。", passCriteria: ["模块职责可说明", "不直接修改原数组", "JSON 解析失败有兜底", "刷新后恢复任务"], aiLevel: 2, aiRule: "AI 可以 review 模块边界，拆分决定和代码解释由自己完成。" },
+      { id: "p0-8", title: "Git 从第一天开始", time: "贯穿阶段", outcome: "能用 status、add、commit、log 和 push 保存每次真实进展。", resources: docs("GitHub：Git 入门", "https://docs.github.com/zh/get-started/using-git/about-git"), miniProject: "为响应式页面和 Todo 建立仓库，每完成一个可验证功能就提交。", passCriteria: ["提交信息说明做了什么", "不把所有功能塞进一次提交", "能查看历史", "能把项目推送到远端"], aiLevel: 1, aiRule: "命令可以查询，提交拆分和提交信息必须自己决定。" },
+    ],
+  },
   { id: "p1", level: "LV.01", title: "前端生存基础", summary: "把 JavaScript、TypeScript 与布局练成可独立排错的基本功。", milestone: "能从空目录做出一个有交互、响应式、类型安全的小应用。", bossBattle: "限时 3 小时：独立完成任务看板，含新增、筛选、状态切换与移动端布局。", bossCriteria: ["不复制整段成品代码", "刷新后数据仍在", "手机与桌面均可用", "控制台无报错"], retrospective: ["哪类错误最耗时？", "哪一步离开 AI 也能重做？", "下阶段要刻意练习什么？"], items: [
     { id: "p1-1", title: "异步与错误处理", time: "3–5 天", outcome: "能解释 Promise 状态并处理请求成功、失败和超时。", resources: docs("MDN：使用 Promise", "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Using_promises"), miniProject: "做一个带 loading / error / retry 的数据加载器。", passCriteria: ["能手写 async/await", "错误能反馈给用户", "没有未处理 Promise"], aiLevel: 2, aiRule: "可让 AI 解释报错；代码先自己写，再让 AI review。" },
     { id: "p1-2", title: "现代 JavaScript 数据处理", time: "2–3 天", outcome: "熟练使用解构、展开、map/filter/reduce 与不可变更新。", resources: docs("MDN：JavaScript 指南", "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide"), miniProject: "把订单数据转换、筛选并汇总为统计卡片。", passCriteria: ["不修改原数组", "能说明每次转换", "覆盖空数据"], aiLevel: 1, aiRule: "只允许 AI 出题和检查，不让 AI 写答案。" },

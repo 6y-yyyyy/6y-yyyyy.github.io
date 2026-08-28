@@ -1,0 +1,6 @@
+.memory-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 14px 0;
+}
