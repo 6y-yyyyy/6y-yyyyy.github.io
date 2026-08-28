@@ -1,63 +1,8 @@
 import { Card, Progress, Tag } from "antd";
-import { CheckCircleFilled, ClockCircleOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, FlagOutlined, LockOutlined } from "@ant-design/icons";
 import { PLAN } from "../data/plan";
 import { useStore } from "../store";
-
 export default function OverallPlanPage() {
-  const { doneItems } = useStore();
-
-  const totalItems = PLAN.reduce((s, p) => s + p.items.length, 0);
-  const totalDone = PLAN.reduce(
-    (s, p) => s + p.items.filter((it) => doneItems.includes(it.id)).length,
-    0
-  );
-
-  return (
-    <div style={{ maxWidth: 720, margin: "0 auto" }}>
-      <Card title={<div style={{ textAlign: "center", fontSize: 18, fontWeight: 700 }}>升级路线</div>}>
-        {/* 总进度 */}
-        <Progress percent={Math.round((totalDone / totalItems) * 100)} status="active" />
-        <p style={{ color: "var(--text-secondary)", fontSize: 12 }}>
-          已完成 {totalDone} / {totalItems} 个学习项
-        </p>
-
-        {/* 每一部分 */}
-        {PLAN.map((part) => {
-          const done = part.items.filter((it) => doneItems.includes(it.id)).length;
-          const total = part.items.length;
-          const isComplete = done === total;
-          const isCurrent = done > 0 && !isComplete;
-          return (
-            <Card
-              key={part.id}
-              size="small"
-              style={{ marginTop: 12 }}
-              title={
-                <span>
-                  {part.title}
-                  {isComplete && (
-                    <CheckCircleFilled style={{ color: "var(--accent)", marginLeft: 8 }} />
-                  )}
-                </span>
-              }
-              extra={
-                isComplete ? (
-                  <Tag color="green">已学完</Tag>
-                ) : isCurrent ? (
-                  <Tag color="blue">进行中</Tag>
-                ) : (
-                  <Tag icon={<ClockCircleOutlined />} color="default">未开始</Tag>
-                )
-              }
-            >
-              <div style={{ color: "var(--text-secondary)", fontSize: 12, marginBottom: 8 }}>
-                {part.summary}
-              </div>
-              <Progress percent={Math.round((done / total) * 100)} size="small" />
-            </Card>
-          );
-        })}
-      </Card>
-    </div>
-  );
+  const { doneItems } = useStore(); const total = PLAN.reduce((s,p)=>s+p.items.length,0); const done = PLAN.reduce((s,p)=>s+p.items.filter(i=>doneItems.includes(i.id)).length,0);
+  return <main className="page-shell"><section className="roadmap-header"><span className="eyebrow">REACT SOLO PATH</span><h1>从会写，到独立交付</h1><p>六个阶段、六场 Boss 战。毕业不是“看完课程”，而是能独立把想法变成上线产品。</p><Progress percent={Math.round(done/total*100)} /><small>{done} / {total} 个核心关卡已通关</small></section><div className="roadmap">{PLAN.map((part,index)=>{const count=part.items.filter(i=>doneItems.includes(i.id)).length;const complete=count===part.items.length;const active=!complete&&(index===0||PLAN.slice(0,index).every(p=>p.items.every(i=>doneItems.includes(i.id))));return <Card key={part.id} className={`roadmap-card ${active?"is-active":""}`}><div className="roadmap-level">{complete?<CheckCircleFilled/>:active?<FlagOutlined/>:<LockOutlined/>}<span>{part.level}</span></div><div className="roadmap-copy"><div className="roadmap-title"><h2>{part.title}</h2><Tag color={complete?"green":active?"gold":"default"}>{complete?"已通关":active?"挑战中":"待解锁"}</Tag></div><p>{part.summary}</p><strong>阶段成果</strong><p>{part.milestone}</p><div className="boss-line">BOSS · {part.bossBattle}</div></div><Progress type="circle" size={62} percent={Math.round(count/part.items.length*100)} /></Card>})}</div></main>;
 }

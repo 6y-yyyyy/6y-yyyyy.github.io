@@ -1,218 +1,35 @@
-// ===== 学习计划数据 =====
-// 这里是「6 环学习地图」的真实学习资料，链接优先选官方文档 / 公认的优质教程
-
-export type Resource = { title: string; url: string; type: "文档" | "书籍" | "视频" };
-
-export type LearningItem = {
-  id: string;
-  title: string; // 简洁概述
-  resources: Resource[]; // 学这个需要看的资料
-  miniProject?: string; // 学完后的待做小项目（边学边做）
-  time?: string; // 建议学习时间，如 "3~5 天"
-};
-
-export type Part = {
-  id: string;
-  title: string;
-  summary: string;
-  items: LearningItem[];
-};
+export type Resource = { title: string; url: string; type: "文档" | "课程" };
+export type LearningItem = { id: string; title: string; time: string; outcome: string; resources: Resource[]; miniProject: string; passCriteria: string[]; aiLevel: 1 | 2 | 3; aiRule: string };
+export type Part = { id: string; title: string; level: string; summary: string; milestone: string; bossBattle: string; bossCriteria: string[]; retrospective: string[]; items: LearningItem[] };
+const docs = (title: string, url: string): Resource[] => [{ title, url, type: "文档" }];
 
 export const PLAN: Part[] = [
-  {
-    id: "p1",
-    title: "① 语言地基",
-    summary: "JS 进阶 + CSS + TypeScript，后面一切的地基",
-    items: [
-      {
-        id: "p1-1",
-        title: "学会 JS 异步：Promise / async / await / try-catch",
-        time: "3~5 天",
-        resources: [
-          { title: "阮一峰《ES6 入门》- Promise", url: "https://es6.ruanyifeng.com/#docs/promise", type: "文档" },
-          { title: "MDN - Promise", url: "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise", type: "文档" },
-          { title: "MDN - async 函数", url: "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/async_function", type: "文档" },
-        ],
-        miniProject: "做一个「点按钮 → 显示加载中 → 2 秒后显示结果」的小页面",
-      },
-      {
-        id: "p1-2",
-        title: "ES6 常用语法：解构 / 箭头函数 / 模板字符串 / 展开运算符",
-        time: "1~2 天",
-        resources: [
-          { title: "阮一峰《ES6 入门》", url: "https://es6.ruanyifeng.com/", type: "文档" },
-          { title: "MDN - 解构赋值", url: "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment", type: "文档" },
-        ],
-        miniProject: "把以前写过的老式 JS 代码，用解构 / 箭头函数 / 模板字符串重写一遍",
-      },
-      {
-        id: "p1-3",
-        title: "CSS 布局与响应式：flex / grid / 媒体查询",
-        time: "2~3 天",
-        resources: [
-          { title: "MDN - Flexbox 基础", url: "https://developer.mozilla.org/zh-CN/docs/Learn/CSS/CSS_layout/Flexbox", type: "文档" },
-          { title: "MDN - Grid 网格", url: "https://developer.mozilla.org/zh-CN/docs/Learn/CSS/CSS_layout/Grids", type: "文档" },
-        ],
-        miniProject: "做一个响应式卡片列表：手机竖排 1 列，电脑横排 3 列",
-      },
-      {
-        id: "p1-4",
-        title: "TypeScript 入门：类型标注 / interface / 泛型",
-        time: "2~3 天",
-        resources: [
-          { title: "TypeScript 官方中文文档", url: "https://www.typescriptlang.org/zh/", type: "文档" },
-          { title: "TypeScript Handbook", url: "https://www.typescriptlang.org/docs/handbook/intro.html", type: "文档" },
-        ],
-        miniProject: "把你之前的一个 JS 小页面改写成 .tsx，跑通并消除所有类型报错",
-      },
-    ],
-  },
-  {
-    id: "p2",
-    title: "② React 框架",
-    summary: "把语言变成能组织起来的界面",
-    items: [
-      {
-        id: "p2-1",
-        title: "组件与数据流：函数组件 / JSX / props / state",
-        time: "3~5 天",
-        resources: [
-          { title: "React 官方中文文档", url: "https://zh-hans.react.dev/", type: "文档" },
-          { title: "React 快速入门", url: "https://zh-hans.react.dev/learn", type: "文档" },
-        ],
-        miniProject: "把当前这个网站拆成组件（侧边栏 / 卡片 / 列表），通过 props 传数据",
-      },
-      {
-        id: "p2-2",
-        title: "核心 Hooks：useState / useEffect / useContext",
-        time: "3~5 天",
-        resources: [
-          { title: "React 官方 - 内置 Hook", url: "https://zh-hans.react.dev/reference/react/hooks", type: "文档" },
-          { title: "React 官方 - useState", url: "https://zh-hans.react.dev/reference/react/useState", type: "文档" },
-        ],
-        miniProject: "把你之前的「校园空间」demo 里再加一个功能（比如点赞按钮）",
-      },
-    ],
-  },
-  {
-    id: "p3",
-    title: "③ 工程化",
-    summary: "学会自己从零搭项目、管版本",
-    items: [
-      {
-        id: "p3-1",
-        title: "从零初始化 Vite + React + TS 项目（不靠别人）",
-        time: "1 天",
-        resources: [
-          { title: "Vite 官方文档", url: "https://cn.vitejs.dev/guide/", type: "文档" },
-        ],
-        miniProject: "不看教程，从 npm create vite 搭一个新项目，成功跑起来",
-      },
-      {
-        id: "p3-2",
-        title: "Git 基础：clone / branch / add / commit / push / PR",
-        time: "2~3 天",
-        resources: [
-          { title: "Git 官方教程（Pro Git）", url: "https://git-scm.com/book/zh/v2", type: "文档" },
-          { title: "GitHub 快速入门", url: "https://docs.github.com/zh/get-started", type: "文档" },
-        ],
-        miniProject: "把项目推到 GitHub，走一遍 commit → push 流程",
-      },
-    ],
-  },
-  {
-    id: "p4",
-    title: "④ 数据交互",
-    summary: "让页面活起来，数据真的从服务器来",
-    items: [
-      {
-        id: "p4-1",
-        title: "HTTP 基础：请求/响应、方法、状态码",
-        time: "1~2 天",
-        resources: [
-          { title: "MDN - HTTP 概述", url: "https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Overview", type: "文档" },
-          { title: "MDN - HTTP 请求方法", url: "https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Methods", type: "文档" },
-        ],
-        miniProject: "打开浏览器 DevTools 的 Network 面板，看一次完整请求的请求头 / 响应体",
-      },
-      {
-        id: "p4-2",
-        title: "axios 封装 + 拦截器 + token 处理",
-        time: "2~3 天",
-        resources: [
-          { title: "axios 官方文档", url: "https://axios-http.com/zh/docs/intro", type: "文档" },
-          { title: "axios - 拦截器", url: "https://axios-http.com/docs/interceptors", type: "文档" },
-        ],
-        miniProject: "封装一个带拦截器的 axios 实例，自动在请求头加 token",
-      },
-      {
-        id: "p4-3",
-        title: "加载/空/错误三种状态处理",
-        time: "1~2 天",
-        resources: [
-          { title: "MDN - 使用 Fetch", url: "https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch", type: "文档" },
-          { title: "axios - 错误处理", url: "https://axios-http.com/docs/handling_errors", type: "文档" },
-        ],
-        miniProject: "给一个页面接真实的公共 API，处理 loading / error / empty 三种状态",
-      },
-    ],
-  },
-  {
-    id: "p5",
-    title: "⑤ 接口对接 / 后端常识",
-    summary: "能跟后端协作、联调",
-    items: [
-      {
-        id: "p5-1",
-        title: "RESTful API 概念 + 联调",
-        time: "1~2 天",
-        resources: [
-          { title: "MDN - 客户端服务器概述", url: "https://developer.mozilla.org/zh-CN/docs/Learn/Server-side/First_steps/Client-Server_overview", type: "文档" },
-          { title: "MDN - 使用 Fetch 获取数据", url: "https://developer.mozilla.org/zh-CN/docs/Learn/JavaScript/Client-side_web_APIs/Fetching_data", type: "文档" },
-        ],
-        miniProject: "用公开 API（如 JSONPlaceholder）手动发几次 GET / POST 请求，观察返回",
-      },
-      {
-        id: "p5-2",
-        title: "token 认证流程（登录 → 存 token → 带 token 请求）",
-        time: "2~3 天",
-        resources: [
-          { title: "JWT 官方介绍", url: "https://jwt.io/introduction", type: "文档" },
-          { title: "MDN - HTTP 认证", url: "https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Authentication", type: "文档" },
-        ],
-        miniProject: "写一个登录页：登录成功存 token，之后请求自动带上，退出则清除",
-      },
-    ],
-  },
-  {
-    id: "p6",
-    title: "⑥ 部署上线",
-    summary: "让项目别人能点开",
-    items: [
-      {
-        id: "p6-1",
-        title: "打包 + 部署到 Vercel / Netlify",
-        time: "1 天",
-        resources: [
-          { title: "Vercel 官方文档", url: "https://vercel.com/docs", type: "文档" },
-          { title: "Netlify 官方文档", url: "https://docs.netlify.com/", type: "文档" },
-        ],
-        miniProject: "把你的项目部署上线，拿到一个公网链接",
-      },
-    ],
-  },
+  { id: "p1", level: "LV.01", title: "前端生存基础", summary: "把 JavaScript、TypeScript 与布局练成可独立排错的基本功。", milestone: "能从空目录做出一个有交互、响应式、类型安全的小应用。", bossBattle: "限时 3 小时：独立完成任务看板，含新增、筛选、状态切换与移动端布局。", bossCriteria: ["不复制整段成品代码", "刷新后数据仍在", "手机与桌面均可用", "控制台无报错"], retrospective: ["哪类错误最耗时？", "哪一步离开 AI 也能重做？", "下阶段要刻意练习什么？"], items: [
+    { id: "p1-1", title: "异步与错误处理", time: "3–5 天", outcome: "能解释 Promise 状态并处理请求成功、失败和超时。", resources: docs("MDN：使用 Promise", "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Using_promises"), miniProject: "做一个带 loading / error / retry 的数据加载器。", passCriteria: ["能手写 async/await", "错误能反馈给用户", "没有未处理 Promise"], aiLevel: 2, aiRule: "可让 AI 解释报错；代码先自己写，再让 AI review。" },
+    { id: "p1-2", title: "现代 JavaScript 数据处理", time: "2–3 天", outcome: "熟练使用解构、展开、map/filter/reduce 与不可变更新。", resources: docs("MDN：JavaScript 指南", "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide"), miniProject: "把订单数据转换、筛选并汇总为统计卡片。", passCriteria: ["不修改原数组", "能说明每次转换", "覆盖空数据"], aiLevel: 1, aiRule: "只允许 AI 出题和检查，不让 AI 写答案。" },
+    { id: "p1-3", title: "响应式布局与可访问性", time: "2–3 天", outcome: "能用 Grid/Flex 构建适配手机和桌面的页面。", resources: docs("MDN：CSS 布局", "https://developer.mozilla.org/zh-CN/docs/Learn_web_development/Core/CSS_layout"), miniProject: "实现响应式项目卡片墙与键盘可操作弹窗。", passCriteria: ["360px 无横向滚动", "键盘可完成主流程", "布局不依赖固定高度"], aiLevel: 2, aiRule: "可让 AI 检查可访问性清单，布局自己实现。" },
+    { id: "p1-4", title: "TypeScript 建模", time: "3–4 天", outcome: "能为组件数据、接口状态和事件建立准确类型。", resources: docs("TypeScript Handbook", "https://www.typescriptlang.org/docs/handbook/intro.html"), miniProject: "把任务看板迁移到 TypeScript strict 模式。", passCriteria: ["无 any", "联合类型表达状态", "tsc 零错误"], aiLevel: 2, aiRule: "AI 可解释类型错误，但每个类型由你决定并说明理由。" },
+  ]},
+  { id: "p2", level: "LV.02", title: "React 核心心智", summary: "掌握组件、状态与数据流，不靠背 API 拼页面。", milestone: "能自行拆组件，并判断状态应该放在哪里。", bossBattle: "从零实现习惯追踪器：增删改、筛选、连续天数与本地持久化。", bossCriteria: ["组件职责清晰", "状态无重复来源", "表单受控且有校验", "刷新不丢数据"], retrospective: ["哪些状态放错过位置？", "重构前后组件边界有何变化？", "能否画出数据流？"], items: [
+    { id: "p2-1", title: "组件、Props 与状态设计", time: "4–5 天", outcome: "能从页面需求推导组件树与最小状态。", resources: docs("React 官方教程", "https://zh-hans.react.dev/learn"), miniProject: "将任务看板拆成表单、筛选器、列表与卡片组件。", passCriteria: ["单向数据流", "列表 key 稳定", "派生数据不重复存 state"], aiLevel: 1, aiRule: "先画组件树；AI 只能针对方案提问。" },
+    { id: "p2-2", title: "Hooks、表单与副作用", time: "5–7 天", outcome: "正确使用 useState/useEffect，并避免常见副作用陷阱。", resources: docs("React Hooks", "https://zh-hans.react.dev/reference/react/hooks"), miniProject: "完成习惯追踪器并加入搜索、表单校验与 localStorage。", passCriteria: ["Effect 依赖正确", "表单错误可见", "严格模式无异常行为"], aiLevel: 2, aiRule: "AI 可做 code review；修改前必须先复述问题。" },
+  ]},
+  { id: "p3", level: "LV.03", title: "工程化与协作", summary: "从零搭建、组织、测试并用 Git 管理真实项目。", milestone: "能在没有教程逐步指令时搭好可维护的 React 工程。", bossBattle: "整理为规范仓库：分支开发、质量检查、README 和发布说明。", bossCriteria: ["build 通过", "至少 3 个有效提交", "README 可让别人运行", "关键逻辑有测试"], retrospective: ["目录结构解决了什么问题？", "哪次提交最难回滚？", "质量检查还缺什么？"], items: [
+    { id: "p3-1", title: "Vite、目录与环境配置", time: "2–3 天", outcome: "独立创建项目并理解构建、环境变量和模块边界。", resources: docs("Vite 指南", "https://cn.vite.dev/guide/"), miniProject: "不用教程初始化 React + TS strict 项目。", passCriteria: ["开发与生产构建均通过", "环境变量不泄密", "目录职责可解释"], aiLevel: 1, aiRule: "AI 只检查最终配置，不给初始化命令。" },
+    { id: "p3-2", title: "Git、测试与交付文档", time: "3–4 天", outcome: "能用分支和小提交交付可验证功能。", resources: docs("Pro Git", "https://git-scm.com/book/zh/v2"), miniProject: "为核心工具函数写测试，并模拟 feature branch + PR。", passCriteria: ["提交信息表达意图", "测试覆盖正常与异常路径", "README 含运行与验收步骤"], aiLevel: 2, aiRule: "AI 可 review diff；提交拆分与测试用例由你设计。" },
+  ]},
+  { id: "p4", level: "LV.04", title: "真实数据与产品状态", summary: "接入 API，把加载、空、错、成功四种状态做完整。", milestone: "能设计可靠的数据请求层和用户可理解的异常体验。", bossBattle: "完成电影探索应用：搜索、分页、详情、收藏与失败重试。", bossCriteria: ["四态完整", "请求竞态可控", "接口层与 UI 分离", "核心流程可恢复"], retrospective: ["最容易漏掉哪种状态？", "网络慢时体验如何？", "请求逻辑能否复用？"], items: [
+    { id: "p4-1", title: "HTTP、Fetch 与浏览器调试", time: "2–3 天", outcome: "能从 Network 面板定位请求问题。", resources: docs("MDN：HTTP 概览", "https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Overview"), miniProject: "使用公共 API 做可取消的搜索建议。", passCriteria: ["能解释状态码", "快速输入不串结果", "错误可重试"], aiLevel: 1, aiRule: "先用 Network 自己定位，AI 只验证结论。" },
+    { id: "p4-2", title: "请求层、缓存与鉴权", time: "3–4 天", outcome: "能封装一致的请求、错误和 token 处理。", resources: docs("Axios 文档", "https://axios-http.com/zh/docs/intro"), miniProject: "封装 API client，并模拟登录过期统一处理。", passCriteria: ["调用方不重复拼配置", "敏感信息不进仓库", "错误结构统一"], aiLevel: 2, aiRule: "AI 可评审边界情况，不生成完整封装。" },
+    { id: "p4-3", title: "异步 UI 与状态建模", time: "2–3 天", outcome: "用明确状态而非多个布尔值表达请求生命周期。", resources: docs("React：状态结构", "https://zh-hans.react.dev/learn/choosing-the-state-structure"), miniProject: "补齐骨架屏、空态、错误态与重试。", passCriteria: ["状态互斥", "错误提示可行动", "无闪烁与重复提交"], aiLevel: 2, aiRule: "先写状态图，再让 AI 挑遗漏分支。" },
+  ]},
+  { id: "p5", level: "LV.05", title: "完整应用架构", summary: "把路由、全局状态、权限与性能组织成可扩展应用。", milestone: "能独立完成多页面、登录态和复杂交互。", bossBattle: "独立开发个人知识库：登录、文章 CRUD、标签筛选、路由权限与草稿保存。", bossCriteria: ["需求拆成迭代", "权限边界清楚", "刷新恢复页面状态", "关键路径性能合格"], retrospective: ["哪些状态真正需要全局？", "架构何处过度设计？", "下次先验证哪个风险？"], items: [
+    { id: "p5-1", title: "路由、CRUD 与接口契约", time: "4–6 天", outcome: "完成多页面导航和完整增删改查闭环。", resources: docs("React Router", "https://reactrouter.com/start/declarative/installation"), miniProject: "实现知识库列表、详情、编辑和 404 页面。", passCriteria: ["URL 可分享", "刷新位置不丢", "删除有确认和反馈"], aiLevel: 2, aiRule: "AI 可评审路由设计，页面实现由你主导。" },
+    { id: "p5-2", title: "认证、全局状态与性能", time: "4–6 天", outcome: "实现登录恢复、权限保护并定位无效渲染。", resources: docs("React：渲染与提交", "https://zh-hans.react.dev/learn/render-and-commit"), miniProject: "加入登录、受保护路由、草稿缓存与性能检查。", passCriteria: ["退出后不可访问私有页", "刷新恢复登录态", "无明显无效重渲染"], aiLevel: 2, aiRule: "AI 作为安全与性能 reviewer；关键决策写成记录。" },
+  ]},
+  { id: "p6", level: "FINAL", title: "独立毕业项目", summary: "从需求到上线，完整证明你能独立交付 React 项目。", milestone: "交付一个可访问、可演示、可维护的线上 React 产品。", bossBattle: "最终 Boss：自选真实问题，完成需求、原型、开发、测试、部署和 5 分钟演示。", bossCriteria: ["核心流程无需讲解即可使用", "移动端与桌面通过验收", "自动化检查通过", "有线上地址与复盘文档", "能脱离 AI 现场修改需求"], retrospective: ["目标与成品偏差是什么？", "AI 帮助和误导在哪里？", "最能证明独立能力的三个证据？", "下一版只做哪三件事？"], items: [
+    { id: "p6-1", title: "毕业项目：设计、实现与上线", time: "2–3 周", outcome: "独立把模糊想法转成可验收、可上线的 React 产品。", resources: [{ title: "Web.dev：性能", url: "https://web.dev/learn/performance", type: "课程" }], miniProject: "选择校园工具、个人效率或内容产品之一，按两周迭代交付。", passCriteria: ["先写需求与验收标准", "至少 5 次用户测试", "Lighthouse 核心项达标", "README 含架构、测试和取舍"], aiLevel: 3, aiRule: "AI 可结对与 review，但禁止一键生成整页；保留提示词日志，并能解释所有核心代码。" },
+  ]},
 ];
-
-// 判断某个 part 是否全部完成
-export function partDone(doneIds: string[], part: Part): boolean {
-  return part.items.every((it) => doneIds.includes(it.id));
-}
-
-// 根据 id 找到某个学习项及其所属部分（用于记录完成日志）
-export function findItem(id: string): { partTitle: string; itemTitle: string } | undefined {
-  for (const part of PLAN) {
-    const item = part.items.find((it) => it.id === id);
-    if (item) return { partTitle: part.title, itemTitle: item.title };
-  }
-  return undefined;
-}
+export function partDone(doneIds: string[], part: Part) { return part.items.every((item) => doneIds.includes(item.id)); }
+export function findItem(id: string) { for (const part of PLAN) { const item = part.items.find((entry) => entry.id === id); if (item) return { partTitle: part.title, itemTitle: item.title }; } }
