@@ -1,0 +1,10 @@
+.drawer-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.drawer-title .ant-btn {
+  font-size: 20px;
+}

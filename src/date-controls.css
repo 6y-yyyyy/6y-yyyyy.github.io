@@ -1,0 +1,40 @@
+.date-controls {
+  display: grid;
+  gap: 8px;
+  min-width: 254px;
+}
+
+.date-stepper,
+.month-shortcuts {
+  display: flex;
+  gap: 6px;
+}
+
+.date-stepper input {
+  min-width: 0;
+  flex: 1;
+  height: 32px;
+  padding: 4px 9px;
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--card-bg);
+}
+
+.date-stepper input:focus {
+  outline: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-color: var(--accent);
+}
+
+.month-shortcuts .ant-btn {
+  flex: 1;
+}
+
+@media (max-width: 700px) {
+  .date-controls {
+    width: 100%;
+    min-width: 0;
+  }
+}
