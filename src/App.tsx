@@ -34,7 +34,7 @@ const MENU_ITEMS = [
   { key: "bestiary", icon: <BugOutlined />, label: "怪物图鉴" },
   { key: "showcase", icon: <ProjectOutlined />, label: "作品陈列柜" },
   { key: "overall", icon: <ApartmentOutlined />, label: "升级路线" },
-  { key: "contributions", icon: <CalendarOutlined />, label: "学习日历" },
+  { key: "contributions", icon: <CalendarOutlined />, label: "肝帝日历" },
   { key: "completed", icon: <HistoryOutlined />, label: "战绩复盘" },
 ];
 
