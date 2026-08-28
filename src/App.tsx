@@ -44,7 +44,7 @@ export default function App() {
   const mobile = !Grid.useBreakpoint().md;
   const [page, setPage] = useState<PageKey>("dashboard");
   const [drawer, setDrawer] = useState(false);
-  const [themeKey, setThemeKey] = useState<ThemeKey>("dune");
+  const [themeKey, setThemeKey] = useState<ThemeKey>("monochrome-print");
   const [collapsed, setCollapsed] = useState(false);
   const [mobileArea, setMobileArea] = useState<"adventure" | "backpack">("adventure");
   const theme = THEMES.find((item) => item.key === themeKey)!;
