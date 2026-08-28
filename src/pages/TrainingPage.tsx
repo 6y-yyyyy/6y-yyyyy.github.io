@@ -21,6 +21,7 @@ export default function TrainingPage() {
   const [answer, setAnswer] = useState("");
   const [verdict, setVerdict] = useState<"idle" | "pass" | "fail">("idle");
   const [feedback, setFeedback] = useState("");
+  const [showReference, setShowReference] = useState(false);
   const [skillDays, setSkillDays] = usePersistentState<string[]>("study_tracker_skill_days", []);
   const [duckDays, setDuckDays] = usePersistentState<string[]>("study_tracker_duck_days", []);
   const [collectedCards, setCollectedCards] = usePersistentState<string[]>("study_tracker_collected_cards", []);
@@ -40,16 +41,18 @@ export default function TrainingPage() {
     setFlipped(false);
   };
   const collectCard = () => {
-    setCollectedCards((cards) => cards.includes(card.id) ? cards : [...cards, card.id]);
-    setSkillDays((days) => days.includes(today) ? days : [...days, today]);
-    message.success("知识卡已收入收藏册");
+    const collected = collectedCards.includes(card.id);
+    setCollectedCards((cards) => collected ? cards.filter((id) => id !== card.id) : [...cards, card.id]);
+    if (!collected) setSkillDays((days) => days.includes(today) ? days : [...days, today]);
+    message.success(collected ? "已从收藏册移除" : "知识卡已收入收藏册");
   };
   const changeTopic = () => {
     setTopicIndex(randomIndex(knowledge.length));
-    setAnswer(""); setVerdict("idle"); setFeedback("");
+    setAnswer(""); setVerdict("idle"); setFeedback(""); setShowReference(false);
   };
   const saveExplanation = () => {
     const text = answer.trim();
+    setShowReference(true);
     const covered = topic.duck.checkpoints.filter((point) => point.terms.some((term) => text.toLowerCase().includes(term.toLowerCase())));
     const missing = topic.duck.checkpoints.filter((point) => !covered.includes(point));
     if (text.length < 30 || covered.length < 2) {
@@ -75,7 +78,7 @@ export default function TrainingPage() {
     </button>
     <h2>{flipped ? card.title : "抽到什么，要翻开才知道"}</h2>
     <p>{flipped ? "这是你已经学过的知识。看一遍，确认自己仍然记得。" : "卡牌只会从你的专属记忆库中出现。"}</p>
-    <div className="training-actions"><Button icon={<ReloadOutlined/>} onClick={drawAgain}>重新抽卡（{knowledge.length} 张）</Button><Button type="primary" disabled={!flipped || collectedCards.includes(card.id)} icon={collectedCards.includes(card.id) ? <StarFilled/> : <StarOutlined/>} onClick={collectCard}>{collectedCards.includes(card.id) ? "已收藏" : "收藏这张卡"}</Button></div>
+    <div className="training-actions"><Button icon={<ReloadOutlined/>} onClick={drawAgain}>重新抽卡（{knowledge.length} 张）</Button><Button type={collectedCards.includes(card.id) ? "default" : "primary"} disabled={!flipped} icon={collectedCards.includes(card.id) ? <StarFilled/> : <StarOutlined/>} onClick={collectCard}>{collectedCards.includes(card.id) ? "取消收藏" : "收藏这张卡"}</Button></div>
   </Card>;
 
   const duckPanel = <>
@@ -85,7 +88,9 @@ export default function TrainingPage() {
       <h2>{topic.duck.question}</h2><p>假装面前的人完全不懂编程，用最简单的话解释清楚。</p>
       <div className="duck-checkpoints">讲清楚这些点：{topic.duck.checkpoints.map((point) => <Tag key={point.label}>{point.label}</Tag>)}</div>
       <Input.TextArea value={answer} onChange={(event) => { setAnswer(event.target.value); setVerdict("idle"); setFeedback(""); }} rows={5} placeholder="我的解释是……"/>
-      {feedback && <Alert className="duck-feedback" type={verdict === "pass" ? "success" : "warning"} showIcon message={feedback}/>}<div className="training-actions"><Button icon={<ReloadOutlined/>} onClick={changeTopic}>换个问题</Button><Button type="primary" onClick={saveExplanation}>讲完了，请鸭子判断</Button></div>
+      {feedback && <Alert className="duck-feedback" type={verdict === "pass" ? "success" : "warning"} showIcon message={feedback}/>}
+      {showReference && <Card size="small" className="reference-answer-card" title="参考答案卡"><p>{topic.summary}</p><h4>一个完整回答应包含：</h4><ul>{topic.duck.checkpoints.map((point) => <li key={point.label}>{point.label}</li>)}</ul><div className="memory-keywords">{topic.keywords.map((keyword) => <Tag key={keyword}>{keyword}</Tag>)}</div></Card>}
+      <div className="training-actions"><Button icon={<ReloadOutlined/>} onClick={changeTopic}>换个问题</Button><Button type="primary" onClick={saveExplanation}>讲完了，请鸭子判断</Button></div>
     </Card>
     <Card title={`橡皮鸭课堂记录 · ${notes.length}`}>{notes.length === 0 ? <Empty description="还没有讲课记录"/> : <div className="note-list">{notes.slice(0, 6).map((note) => <div key={note.id}><b>{note.topic}</b><p>{note.answer}</p></div>)}</div>}</Card>
   </>;

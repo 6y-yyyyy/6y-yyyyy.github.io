@@ -12,6 +12,8 @@ import "./dashboard-fix.css";
 import "./flip-card.css";
 import "./card-content.css";
 import "./workflow.css";
+import "./reference-answer.css";
+import "./memory-detail.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
