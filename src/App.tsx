@@ -8,6 +8,7 @@ import { FaMoon } from "react-icons/fa";
 import { TbSwords } from "react-icons/tb";
 import { HiOutlineClipboardList } from "react-icons/hi";
 import { GiSchoolBag } from "react-icons/gi";
+import { FaSchool } from "react-icons/fa6";
 import DashboardPage from "./pages/DashboardPage";
 import CurrentPartPage from "./pages/CurrentPartPage";
 import DailyChallengePage from "./pages/DailyChallengePage";
@@ -50,7 +51,7 @@ export default function App() {
   const width = collapsed ? 80 : 210;
   const navigate = (target: PageKey) => { setPage(target); setDrawer(false); };
   const adventureMenu = <Menu mode="inline" selectedKeys={[page]} items={MENU_ITEMS} style={{ background: "transparent" }} onClick={(event) => navigate(event.key as PageKey)} />;
-  const backpackMenu = <Menu mode="inline" selectedKeys={[page]} items={[{ key: "schedule", icon: <HiOutlineClipboardList />, label: "课程表" }, { key: "academic-calendar", icon: <CalendarOutlined />, label: "校历" }]} style={{ background: "transparent" }} onClick={(event) => navigate(event.key as PageKey)} />;
+  const backpackMenu = <Menu mode="inline" selectedKeys={[page]} items={[{ key: "schedule", icon: <HiOutlineClipboardList />, label: "课程表" }, { key: "academic-calendar", icon: <FaSchool />, label: "校历" }]} style={{ background: "transparent" }} onClick={(event) => navigate(event.key as PageKey)} />;
   const openBackpack = () => { setMobileArea("backpack"); setPage("schedule"); };
   const openAdventure = () => { setMobileArea("adventure"); setPage("dashboard"); };
   const themeButton = <Button aria-label="切换主题" type="text" onClick={() => setThemeKey(themeKey === "dune" ? "monochrome-print" : "dune")} icon={themeKey === "dune" ? <MdWbSunny /> : <FaMoon />} />;
