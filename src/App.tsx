@@ -19,12 +19,13 @@ import OverallPlanPage from "./pages/OverallPlanPage";
 import ContributionsPage from "./pages/ContributionsPage";
 import CompletedPage from "./pages/CompletedPage";
 import SchedulePage from "./pages/SchedulePage";
+import AcademicCalendarPage from "./pages/AcademicCalendarPage";
 import { THEMES, type ThemeKey } from "./themes";
 import "./drawer.css";
 
 const { Sider, Content } = Layout;
 type AdventurePageKey = "dashboard" | "current" | "challenge" | "training" | "memory" | "bestiary" | "showcase" | "overall" | "contributions" | "completed";
-type PageKey = AdventurePageKey | "schedule";
+type PageKey = AdventurePageKey | "schedule" | "academic-calendar";
 const MENU_ITEMS = [
   { key: "dashboard", icon: <HomeOutlined />, label: "今日冒险" },
   { key: "current", icon: <TbSwords />, label: "主线任务" },
@@ -49,13 +50,13 @@ export default function App() {
   const width = collapsed ? 80 : 210;
   const navigate = (target: PageKey) => { setPage(target); setDrawer(false); };
   const adventureMenu = <Menu mode="inline" selectedKeys={[page]} items={MENU_ITEMS} style={{ background: "transparent" }} onClick={(event) => navigate(event.key as PageKey)} />;
-  const backpackMenu = <Menu mode="inline" selectedKeys={[page]} items={[{ key: "schedule", icon: <HiOutlineClipboardList />, label: "课程表" }]} style={{ background: "transparent" }} onClick={() => navigate("schedule")} />;
+  const backpackMenu = <Menu mode="inline" selectedKeys={[page]} items={[{ key: "schedule", icon: <HiOutlineClipboardList />, label: "课程表" }, { key: "academic-calendar", icon: <CalendarOutlined />, label: "校历" }]} style={{ background: "transparent" }} onClick={(event) => navigate(event.key as PageKey)} />;
   const openBackpack = () => { setMobileArea("backpack"); setPage("schedule"); };
   const openAdventure = () => { setMobileArea("adventure"); setPage("dashboard"); };
   const themeButton = <Button aria-label="切换主题" type="text" onClick={() => setThemeKey(themeKey === "dune" ? "monochrome-print" : "dune")} icon={themeKey === "dune" ? <MdWbSunny /> : <FaMoon />} />;
 
   useEffect(() => {
-    if (!mobile && page === "schedule") openAdventure();
+    if (!mobile && (page === "schedule" || page === "academic-calendar")) openAdventure();
   }, [mobile, page]);
 
   return <ConfigProvider locale={zhCN} theme={theme.antd}><div style={theme.vars as CSSProperties}><Layout style={{ minHeight: "100vh" }}>
@@ -65,6 +66,7 @@ export default function App() {
       {page === "dashboard" && <DashboardPage onNavigate={(target) => navigate(target)} />}
       {page === "current" && <CurrentPartPage />}{page === "challenge" && <DailyChallengePage />}{page === "training" && <TrainingPage />}{page === "memory" && <MemoryPage />}{page === "bestiary" && <BestiaryPage />}{page === "showcase" && <ShowcasePage />}{page === "overall" && <OverallPlanPage />}{page === "contributions" && <ContributionsPage />}{page === "completed" && <CompletedPage />}
       {mobile && page === "schedule" && <SchedulePage />}
+      {mobile && page === "academic-calendar" && <AcademicCalendarPage />}
     </Content>
   </Layout></div></ConfigProvider>;
 }
