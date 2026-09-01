@@ -1,55 +1,134 @@
 export type Resource = { title: string; url: string; type: "文档" | "课程" };
-export type LearningItem = { id: string; title: string; time: string; outcome: string; resources: Resource[]; miniProject: string; passCriteria: string[]; aiLevel: 1 | 2 | 3; aiRule: string };
+export type LearningItem = { id: string; title: string; time: string; outcome: string; resources: Resource[]; studySteps: string[]; topics: string[]; miniProject: string; passCriteria: string[]; aiLevel: 1 | 2 | 3; aiRule: string };
 export type Part = { id: string; title: string; level: string; summary: string; milestone: string; bossBattle: string; bossCriteria: string[]; retrospective: string[]; items: LearningItem[] };
-const docs = (title: string, url: string): Resource[] => [{ title, url, type: "文档" }];
+export type SideQuest = { id: string; title: string; description: string; topics: string[] };
 
-export const PROJECT_WORKFLOW = ["一句话定义问题", "列出必须功能", "画页面草图", "设计数据结构", "拆分开发顺序", "逐项实现", "补齐边界状态", "手机端验收", "构建并提交 Git", "写下复盘"];
+const doc = (title: string, url: string): Resource => ({ title, url, type: "文档" });
+const RESOURCES: Record<number, Resource[]> = {
+  1: [doc("Pro Git：Git 基础", "https://git-scm.com/book/zh/v2/Git-基础-获取-Git-仓库"), doc("GitHub：解决合并冲突", "https://docs.github.com/zh/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-using-the-command-line")],
+  2: [doc("Node.js：npm 简介", "https://nodejs.org/en/learn/getting-started/an-introduction-to-the-npm-package-manager"), doc("Vite：开始", "https://cn.vite.dev/guide/"), doc("Vite：环境变量", "https://cn.vite.dev/guide/env-and-mode")],
+  3: [doc("MDN：JavaScript 指南", "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide"), doc("MDN：使用 Promise", "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Using_promises"), doc("MDN：事件循环", "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Event_loop")],
+  4: [doc("MDN：HTTP 概览", "https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Overview"), doc("MDN：使用 Fetch", "https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch"), doc("MDN：CORS", "https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS")],
+  5: [doc("TypeScript Handbook", "https://www.typescriptlang.org/docs/handbook/intro.html"), doc("React：使用 TypeScript", "https://zh-hans.react.dev/learn/typescript")],
+  6: [doc("React：快速入门", "https://zh-hans.react.dev/learn"), doc("React：状态管理", "https://zh-hans.react.dev/learn/managing-state"), doc("React Router：教程", "https://reactrouter.com/start/declarative/installation")],
+  7: [doc("React：从设计稿到实现", "https://zh-hans.react.dev/learn/thinking-in-react"), doc("web.dev：响应式设计", "https://web.dev/learn/design/")],
+  8: [doc("Python 官方教程", "https://docs.python.org/zh-cn/3/tutorial/"), doc("Python：虚拟环境和包", "https://docs.python.org/zh-cn/3/tutorial/venv.html")],
+  9: [doc("FastAPI 官方教程", "https://fastapi.tiangolo.com/zh/tutorial/"), doc("FastAPI：错误处理", "https://fastapi.tiangolo.com/zh/tutorial/handling-errors/")],
+  10: [doc("PostgreSQL 官方教程", "https://www.postgresql.org/docs/current/tutorial.html"), doc("PostgreSQL：SQL 语言", "https://www.postgresql.org/docs/current/sql.html")],
+  11: [doc("FastAPI：SQL 数据库", "https://fastapi.tiangolo.com/tutorial/sql-databases/"), doc("OWASP：认证速查表", "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html")],
+  12: [doc("OpenAI：文本生成", "https://platform.openai.com/docs/guides/text"), doc("OpenAI：结构化输出", "https://platform.openai.com/docs/guides/structured-outputs"), doc("OpenAI：生产最佳实践", "https://platform.openai.com/docs/guides/production-best-practices")],
+  13: [doc("OpenAI：流式响应", "https://platform.openai.com/docs/guides/streaming-responses"), doc("MDN：Server-sent events", "https://developer.mozilla.org/zh-CN/docs/Web/API/Server-sent_events")],
+  14: [doc("OpenAI：Function Calling", "https://platform.openai.com/docs/guides/function-calling"), doc("OpenAI：Tools", "https://platform.openai.com/docs/guides/tools")],
+  15: [doc("OpenAI：Retrieval", "https://platform.openai.com/docs/guides/retrieval"), doc("OpenAI：Embeddings", "https://platform.openai.com/docs/guides/embeddings")],
+  16: [doc("OpenAI：构建 Agents", "https://platform.openai.com/docs/guides/agents"), doc("OpenAI：Agent Evals", "https://platform.openai.com/docs/guides/agent-evals"), doc("MCP 官方介绍", "https://modelcontextprotocol.io/introduction")],
+  17: [doc("React：阅读现有代码时的核心概念", "https://zh-hans.react.dev/learn/describing-the-ui"), doc("GitHub：理解代码变更", "https://docs.github.com/zh/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests")],
+  18: [doc("Vite：部署静态站点", "https://cn.vite.dev/guide/static-deploy.html"), doc("Docker：入门", "https://docs.docker.com/get-started/")],
+  19: [doc("GitHub：关于 README", "https://docs.github.com/zh/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes"), doc("GitHub：仓库最佳实践", "https://docs.github.com/zh/repositories/creating-and-managing-repositories/best-practices-for-repositories")],
+  20: [doc("MDN：Web 开发学习路径", "https://developer.mozilla.org/zh-CN/docs/Learn_web_development"), doc("React：渲染和提交", "https://zh-hans.react.dev/learn/render-and-commit")],
+  21: [doc("GitHub：准备代码审查", "https://docs.github.com/zh/pull-requests/collaborating-with-pull-requests/getting-started/helping-others-review-your-changes"), doc("web.dev：性能学习", "https://web.dev/learn/performance/")],
+  22: [doc("GitHub Docs：使用个人资料展示作品", "https://docs.github.com/zh/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/about-your-profile")],
+  23: [doc("GitHub：管理求职项目仓库", "https://docs.github.com/zh/repositories/creating-and-managing-repositories/best-practices-for-repositories")],
+};
+
+const PRACTICE: Record<number, string> = {
+  1: "在练习仓库创建 feature 分支，修改一个功能，完成两次小提交，合并回主分支并推送；故意制造一次简单冲突后自行解决。",
+  2: "从空目录创建 Vite + React + TypeScript 项目，安装一个依赖，添加 dev/build 脚本和环境变量示例，并写下启动失败排查顺序。",
+  3: "用模块化 JavaScript 写一个异步任务加载器：转换数组数据，并完整处理 loading、成功、空数据和失败重试。",
+  4: "在浏览器中请求一个公开 API，用 Network 面板记录请求方法、状态码、Header、JSON 响应和一次 CORS 或网络错误。",
+  5: "为任务数据、组件 Props、表单事件和请求状态建立类型；使用联合类型表达 loading/success/error，消除核心代码中的 any。",
+  6: "开发一个带路由、列表、筛选和表单的任务应用；画出组件树，并解释一次用户操作如何更新 State 和 UI。",
+  7: "选择一个真实小问题，先写需求与验收清单，再完成 React + TypeScript 项目、Git 提交、移动端检查和线上部署。",
+  8: "编写一个命令行学习记录工具：使用函数、class、模块、类型标注和异常处理，并在虚拟环境中管理依赖。",
+  9: "为学习记录实现 FastAPI CRUD 接口，拆分 Router，加入参数校验和统一错误响应，再用前端或 API 客户端联调。",
+  10: "为用户、学习任务和完成记录设计 PostgreSQL 表，写出建表、CRUD、JOIN 和索引语句，并解释主外键关系。",
+  11: "给现有 React 项目加入一个真实全栈模块：登录后创建、查询、修改和删除数据，刷新后数据仍在数据库中。",
+  12: "通过后端安全调用 LLM API，实现一个返回结构化学习建议的接口；记录输入、输出、Token 使用和异常状态。",
+  13: "把普通 AI 响应改成 SSE 流式输出，在 React 中实现逐字更新、停止生成、Loading 和 Error 状态。",
+  14: "实现“查询学习任务”和“创建学习任务”两个 Tool，校验参数、限制权限，并在界面展示工具调用状态。",
+  15: "准备一组自己的学习资料，完成切分、Embedding、检索和带来源回答；用三组问题检查检索是否命中。",
+  16: "画出并实现一个最小 Agent Loop：读取目标、选择工具、更新 State、判断是否结束，并为成功和失败各写一个 Eval。",
+  17: "在「你赢历险记」选择一个已经学过的模块，先画数据流，再亲自完成一次可验证修改、Debug 记录和代码说明。",
+  18: "把一个全栈项目部署到真实环境，配置前后端地址、数据库和环境变量，并验证 HTTPS、日志与重启恢复。",
+  19: "整理一个核心 GitHub 仓库：补齐背景、功能、截图、技术栈、架构图、数据流、本地运行方式和在线 Demo。",
+  20: "从自己的项目各整理一个 JavaScript、React、HTTP 和 Git 实例；用自己的话回答并在代码中指出证据。",
+  21: "录制一次 5 分钟项目讲解并做模拟追问：技术选型、数据流、最难 Bug、AI 参与边界和个人技术决策。",
+  22: "完成一页简历 V1；每条技能和项目描述都关联到仓库、在线 Demo、提交记录或可讲清的真实实现。",
+  23: "建立投递记录表并开始真实投递；每次笔试或面试后，把不会的问题转成一个可执行支线任务。",
+};
+
+const makeTask = (id: number, title: string, outcome: string, topics: string[], criteria: string[], aiLevel: 1 | 2 | 3 = 2): LearningItem => ({
+  id: `intern-${String(id).padStart(2, "0")}`, title, time: "按掌握程度推进", outcome,
+  resources: RESOURCES[id] ?? [], topics,
+  studySteps: [
+    `先打开“${RESOURCES[id]?.[0]?.title ?? "本关资料"}”，建立本关整体认识，不要求第一次全部记住。`,
+    `按顺序学习并做最小练习：${topics.join(" → ")}。`,
+    "合上资料，用自己的话写下关键概念，并从零重做最小示例。",
+    "完成本关项目实战，再逐项对照通关标准验收；未通过的部分回到对应资料补缺。",
+  ],
+  miniProject: PRACTICE[id], passCriteria: criteria, aiLevel,
+  aiRule: aiLevel === 1 ? "AI 可以解释、出题和检查；核心练习先自己完成。" : aiLevel === 2 ? "AI 可以提示、Review 和 Debug；核心代码要能理解、修改并解释。" : "AI 可以结对开发；关键架构与核心实现必须能独立讲清并验证。",
+});
+const makePart = (id: number, title: string, summary: string, milestone: string, items: LearningItem[]): Part => ({
+  id: `stage-${id}`, level: id === 10 ? "FINAL" : `STAGE ${String(id).padStart(2, "0")}`, title, summary, milestone, items,
+  bossBattle: milestone, bossCriteria: items.flatMap((item) => item.passCriteria).slice(0, 4),
+  retrospective: ["这一站真正掌握了什么？", "哪些内容还需要在项目中继续练习？", "能否不用背诵，用自己的代码或经历解释？"],
+});
+
+export const PROJECT_WORKFLOW = ["明确本关目标", "拆出最小练习", "先自己尝试", "运行并观察", "定位与修复", "对照标准验收", "记录关键收获"];
 
 export const PLAN: Part[] = [
-  {
-    id: "p0", level: "LV.00", title: "基础唤醒与项目启程",
-    summary: "不重看整套网课，用短练习唤醒 HTML、CSS 和 JavaScript，并第一次走完整项目流程。",
-    milestone: "能不跟视频逐行复制，独立完成一个响应式页面和一个原生 JavaScript Todo List。",
-    bossBattle: "原生 JavaScript Todo List：从需求清单、页面草图、数据结构到开发、调试、Git 提交和验收。",
-    bossCriteria: ["新增、完成、删除与三种筛选可用", "刷新后任务仍在", "有空状态和表单校验", "360px 下无横向滚动", "至少 5 个表达意图的 Git 提交", "能解释数据、事件和页面更新的完整流程"],
-    retrospective: ["项目开始前先做了哪三件事？", "最常见的错误来自语法、数据还是 DOM？", "哪部分仍需要看资料才能完成？", "如果重做一次，会怎样调整开发顺序？"],
-    items: [
-      { id: "p0-1", title: "HTML 语义化、表单与可访问性唤醒", time: "1 天", outcome: "能选择合适的页面标签，并写出有 label、校验和合理按钮类型的表单。", resources: docs("MDN：HTML 入门", "https://developer.mozilla.org/zh-CN/docs/Learn_web_development/Core/Structuring_content"), miniProject: "做一个包含导航、个人介绍、项目卡片和联系表单的页面骨架。", passCriteria: ["不全部使用 div", "图片有 alt", "输入框有关联 label", "键盘可以完成表单操作"], aiLevel: 1, aiRule: "可以查标签用途；页面结构先自己决定，AI 只做可访问性检查。" },
-      { id: "p0-2", title: "盒模型、优先级与定位复健", time: "1–2 天", outcome: "能解释元素真实尺寸、样式覆盖原因和 absolute 的定位参照物。", resources: docs("MDN：CSS 盒模型", "https://developer.mozilla.org/zh-CN/docs/Learn_web_development/Core/Styling_basics/Box_model"), miniProject: "还原一张带角标、头像和按钮的个人资料卡。", passCriteria: ["正确使用 border-box", "不靠乱加 margin 对齐", "能说出角标相对谁定位", "能用 DevTools 找到覆盖样式"], aiLevel: 1, aiRule: "先用 DevTools 检查盒模型和样式来源，再向 AI 验证结论。" },
-      { id: "p0-3", title: "Flex、Grid 与响应式布局唤醒", time: "2 天", outcome: "能选择一维或二维布局，并通过媒体查询完成手机端重排。", resources: docs("MDN：CSS 布局", "https://developer.mozilla.org/zh-CN/docs/Learn_web_development/Core/CSS_layout"), miniProject: "把个人介绍页完善为响应式作品卡片墙。", passCriteria: ["Flex 居中属性能独立写出", "桌面多列、手机单列", "360px 无横向滚动", "不使用固定页面高度"], aiLevel: 1, aiRule: "AI 可以给验收尺寸，不直接生成整套 CSS。" },
-      { id: "p0-4", title: "JavaScript 变量、函数与流程控制", time: "2–3 天", outcome: "能独立使用变量、条件、循环、函数与 return 组织小段逻辑。", resources: docs("MDN：JavaScript 基础", "https://developer.mozilla.org/zh-CN/docs/Learn_web_development/Core/Scripting"), miniProject: "完成价格计算器：输入数量和折扣，校验后输出结果。", passCriteria: ["能区分 let 与 const", "函数有明确输入输出", "覆盖非法输入", "不用复制整段答案"], aiLevel: 1, aiRule: "AI 只出测试数据和提示错误位置，逻辑必须自己完成。" },
-      { id: "p0-5", title: "数组、对象、引用与常用数组方法", time: "3 天", outcome: "理解对象引用，能用 map、filter、find 和 reduce 处理真实数据。", resources: docs("MDN：数组", "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array"), miniProject: "把任务数据完成新增、筛选、统计和不可变更新。", passCriteria: ["知道赋值为何可能共享数组", "map 与 forEach 不再混淆", "筛选不修改原数组", "能处理空数组"], aiLevel: 1, aiRule: "可以让 AI 生成练习数据，数组处理过程由自己写。" },
-      { id: "p0-6", title: "DOM、事件冒泡与页面渲染", time: "3–4 天", outcome: "能查询元素、监听事件、根据数组数据重新渲染页面。", resources: docs("MDN：DOM 脚本", "https://developer.mozilla.org/zh-CN/docs/Learn_web_development/Core/Scripting/DOM_scripting"), miniProject: "制作原生 JavaScript 任务列表的新增、完成和删除功能。", passCriteria: ["使用 querySelector 和 addEventListener", "能解释事件冒泡", "列表由数据生成而非复制 HTML", "空数据时显示提示"], aiLevel: 2, aiRule: "遇到 Bug 先查控制台和事件 target，15 分钟后再让 AI 提示。" },
-      { id: "p0-7", title: "现代语法、模块与 localStorage", time: "2–3 天", outcome: "会使用解构、展开、模板字符串、import/export，并能安全保存本地数据。", resources: docs("MDN：JavaScript 模块", "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Modules"), miniProject: "把 Todo 拆成数据、存储和界面模块，并加入刷新持久化。", passCriteria: ["模块职责可说明", "不直接修改原数组", "JSON 解析失败有兜底", "刷新后恢复任务"], aiLevel: 2, aiRule: "AI 可以 review 模块边界，拆分决定和代码解释由自己完成。" },
-      { id: "p0-8", title: "Git 从第一天开始", time: "贯穿阶段", outcome: "能用 status、add、commit、log 和 push 保存每次真实进展。", resources: docs("GitHub：Git 入门", "https://docs.github.com/zh/get-started/using-git/about-git"), miniProject: "为响应式页面和 Todo 建立仓库，每完成一个可验证功能就提交。", passCriteria: ["提交信息说明做了什么", "不把所有功能塞进一次提交", "能查看历史", "能把项目推送到远端"], aiLevel: 1, aiRule: "命令可以查询，提交拆分和提交信息必须自己决定。" },
-    ],
-  },
-  { id: "p1", level: "LV.01", title: "前端生存基础", summary: "把 JavaScript、TypeScript 与布局练成可独立排错的基本功。", milestone: "能从空目录做出一个有交互、响应式、类型安全的小应用。", bossBattle: "限时 3 小时：独立完成任务看板，含新增、筛选、状态切换与移动端布局。", bossCriteria: ["不复制整段成品代码", "刷新后数据仍在", "手机与桌面均可用", "控制台无报错"], retrospective: ["哪类错误最耗时？", "哪一步离开 AI 也能重做？", "下阶段要刻意练习什么？"], items: [
-    { id: "p1-1", title: "异步与错误处理", time: "3–5 天", outcome: "能解释 Promise 状态并处理请求成功、失败和超时。", resources: docs("MDN：使用 Promise", "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Using_promises"), miniProject: "做一个带 loading / error / retry 的数据加载器。", passCriteria: ["能手写 async/await", "错误能反馈给用户", "没有未处理 Promise"], aiLevel: 2, aiRule: "可让 AI 解释报错；代码先自己写，再让 AI review。" },
-    { id: "p1-2", title: "现代 JavaScript 数据处理", time: "2–3 天", outcome: "熟练使用解构、展开、map/filter/reduce 与不可变更新。", resources: docs("MDN：JavaScript 指南", "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide"), miniProject: "把订单数据转换、筛选并汇总为统计卡片。", passCriteria: ["不修改原数组", "能说明每次转换", "覆盖空数据"], aiLevel: 1, aiRule: "只允许 AI 出题和检查，不让 AI 写答案。" },
-    { id: "p1-3", title: "响应式布局与可访问性", time: "2–3 天", outcome: "能用 Grid/Flex 构建适配手机和桌面的页面。", resources: docs("MDN：CSS 布局", "https://developer.mozilla.org/zh-CN/docs/Learn_web_development/Core/CSS_layout"), miniProject: "实现响应式项目卡片墙与键盘可操作弹窗。", passCriteria: ["360px 无横向滚动", "键盘可完成主流程", "布局不依赖固定高度"], aiLevel: 2, aiRule: "可让 AI 检查可访问性清单，布局自己实现。" },
-    { id: "p1-4", title: "TypeScript 建模", time: "3–4 天", outcome: "能为组件数据、接口状态和事件建立准确类型。", resources: docs("TypeScript Handbook", "https://www.typescriptlang.org/docs/handbook/intro.html"), miniProject: "把任务看板迁移到 TypeScript strict 模式。", passCriteria: ["无 any", "联合类型表达状态", "tsc 零错误"], aiLevel: 2, aiRule: "AI 可解释类型错误，但每个类型由你决定并说明理由。" },
-  ]},
-  { id: "p2", level: "LV.02", title: "React 核心心智", summary: "掌握组件、状态与数据流，不靠背 API 拼页面。", milestone: "能自行拆组件，并判断状态应该放在哪里。", bossBattle: "从零实现习惯追踪器：增删改、筛选、连续天数与本地持久化。", bossCriteria: ["组件职责清晰", "状态无重复来源", "表单受控且有校验", "刷新不丢数据"], retrospective: ["哪些状态放错过位置？", "重构前后组件边界有何变化？", "能否画出数据流？"], items: [
-    { id: "p2-1", title: "组件、Props 与状态设计", time: "4–5 天", outcome: "能从页面需求推导组件树与最小状态。", resources: docs("React 官方教程", "https://zh-hans.react.dev/learn"), miniProject: "将任务看板拆成表单、筛选器、列表与卡片组件。", passCriteria: ["单向数据流", "列表 key 稳定", "派生数据不重复存 state"], aiLevel: 1, aiRule: "先画组件树；AI 只能针对方案提问。" },
-    { id: "p2-2", title: "Hooks、表单与副作用", time: "5–7 天", outcome: "正确使用 useState/useEffect，并避免常见副作用陷阱。", resources: docs("React Hooks", "https://zh-hans.react.dev/reference/react/hooks"), miniProject: "完成习惯追踪器并加入搜索、表单校验与 localStorage。", passCriteria: ["Effect 依赖正确", "表单错误可见", "严格模式无异常行为"], aiLevel: 2, aiRule: "AI 可做 code review；修改前必须先复述问题。" },
-  ]},
-  { id: "p3", level: "LV.03", title: "工程化与协作", summary: "从零搭建、组织、测试并用 Git 管理真实项目。", milestone: "能在没有教程逐步指令时搭好可维护的 React 工程。", bossBattle: "整理为规范仓库：分支开发、质量检查、README 和发布说明。", bossCriteria: ["build 通过", "至少 3 个有效提交", "README 可让别人运行", "关键逻辑有测试"], retrospective: ["目录结构解决了什么问题？", "哪次提交最难回滚？", "质量检查还缺什么？"], items: [
-    { id: "p3-1", title: "Vite、目录与环境配置", time: "2–3 天", outcome: "独立创建项目并理解构建、环境变量和模块边界。", resources: docs("Vite 指南", "https://cn.vite.dev/guide/"), miniProject: "不用教程初始化 React + TS strict 项目。", passCriteria: ["开发与生产构建均通过", "环境变量不泄密", "目录职责可解释"], aiLevel: 1, aiRule: "AI 只检查最终配置，不给初始化命令。" },
-    { id: "p3-2", title: "Git、测试与交付文档", time: "3–4 天", outcome: "能用分支和小提交交付可验证功能。", resources: docs("Pro Git", "https://git-scm.com/book/zh/v2"), miniProject: "为核心工具函数写测试，并模拟 feature branch + PR。", passCriteria: ["提交信息表达意图", "测试覆盖正常与异常路径", "README 含运行与验收步骤"], aiLevel: 2, aiRule: "AI 可 review diff；提交拆分与测试用例由你设计。" },
-  ]},
-  { id: "p4", level: "LV.04", title: "真实数据与产品状态", summary: "接入 API，把加载、空、错、成功四种状态做完整。", milestone: "能设计可靠的数据请求层和用户可理解的异常体验。", bossBattle: "完成电影探索应用：搜索、分页、详情、收藏与失败重试。", bossCriteria: ["四态完整", "请求竞态可控", "接口层与 UI 分离", "核心流程可恢复"], retrospective: ["最容易漏掉哪种状态？", "网络慢时体验如何？", "请求逻辑能否复用？"], items: [
-    { id: "p4-1", title: "HTTP、Fetch 与浏览器调试", time: "2–3 天", outcome: "能从 Network 面板定位请求问题。", resources: docs("MDN：HTTP 概览", "https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Overview"), miniProject: "使用公共 API 做可取消的搜索建议。", passCriteria: ["能解释状态码", "快速输入不串结果", "错误可重试"], aiLevel: 1, aiRule: "先用 Network 自己定位，AI 只验证结论。" },
-    { id: "p4-2", title: "请求层、缓存与鉴权", time: "3–4 天", outcome: "能封装一致的请求、错误和 token 处理。", resources: docs("Axios 文档", "https://axios-http.com/zh/docs/intro"), miniProject: "封装 API client，并模拟登录过期统一处理。", passCriteria: ["调用方不重复拼配置", "敏感信息不进仓库", "错误结构统一"], aiLevel: 2, aiRule: "AI 可评审边界情况，不生成完整封装。" },
-    { id: "p4-3", title: "异步 UI 与状态建模", time: "2–3 天", outcome: "用明确状态而非多个布尔值表达请求生命周期。", resources: docs("React：状态结构", "https://zh-hans.react.dev/learn/choosing-the-state-structure"), miniProject: "补齐骨架屏、空态、错误态与重试。", passCriteria: ["状态互斥", "错误提示可行动", "无闪烁与重复提交"], aiLevel: 2, aiRule: "先写状态图，再让 AI 挑遗漏分支。" },
-  ]},
-  { id: "p5", level: "LV.05", title: "完整应用架构", summary: "把路由、全局状态、权限与性能组织成可扩展应用。", milestone: "能独立完成多页面、登录态和复杂交互。", bossBattle: "独立开发个人知识库：登录、文章 CRUD、标签筛选、路由权限与草稿保存。", bossCriteria: ["需求拆成迭代", "权限边界清楚", "刷新恢复页面状态", "关键路径性能合格"], retrospective: ["哪些状态真正需要全局？", "架构何处过度设计？", "下次先验证哪个风险？"], items: [
-    { id: "p5-1", title: "路由、CRUD 与接口契约", time: "4–6 天", outcome: "完成多页面导航和完整增删改查闭环。", resources: docs("React Router", "https://reactrouter.com/start/declarative/installation"), miniProject: "实现知识库列表、详情、编辑和 404 页面。", passCriteria: ["URL 可分享", "刷新位置不丢", "删除有确认和反馈"], aiLevel: 2, aiRule: "AI 可评审路由设计，页面实现由你主导。" },
-    { id: "p5-2", title: "认证、全局状态与性能", time: "4–6 天", outcome: "实现登录恢复、权限保护并定位无效渲染。", resources: docs("React：渲染与提交", "https://zh-hans.react.dev/learn/render-and-commit"), miniProject: "加入登录、受保护路由、草稿缓存与性能检查。", passCriteria: ["退出后不可访问私有页", "刷新恢复登录态", "无明显无效重渲染"], aiLevel: 2, aiRule: "AI 作为安全与性能 reviewer；关键决策写成记录。" },
-  ]},
-  { id: "p6", level: "FINAL", title: "独立毕业项目", summary: "从需求到上线，完整证明你能独立交付 React 项目。", milestone: "交付一个可访问、可演示、可维护的线上 React 产品。", bossBattle: "最终 Boss：自选真实问题，完成需求、原型、开发、测试、部署和 5 分钟演示。", bossCriteria: ["核心流程无需讲解即可使用", "移动端与桌面通过验收", "自动化检查通过", "有线上地址与复盘文档", "能脱离 AI 现场修改需求"], retrospective: ["目标与成品偏差是什么？", "AI 帮助和误导在哪里？", "最能证明独立能力的三个证据？", "下一版只做哪三件事？"], items: [
-    { id: "p6-1", title: "毕业项目：设计、实现与上线", time: "2–3 周", outcome: "独立把模糊想法转成可验收、可上线的 React 产品。", resources: [{ title: "Web.dev：性能", url: "https://web.dev/learn/performance", type: "课程" }], miniProject: "选择校园工具、个人效率或内容产品之一，按两周迭代交付。", passCriteria: ["先写需求与验收标准", "至少 5 次用户测试", "Lighthouse 核心项达标", "README 含架构、测试和取舍"], aiLevel: 3, aiRule: "AI 可结对与 review，但禁止一键生成整页；保留提示词日志，并能解释所有核心代码。" },
-  ]},
+  makePart(1, "整理装备", "先具备管理代码和运行现代前端项目的基本能力。", "独立完成分支开发、合并、推送，并能启动和排查 Vite 项目。", [
+    makeTask(1, "Git & GitHub", "掌握日常开发的版本管理闭环。", ["clone / add / commit / push / pull", "branch / merge", ".gitignore / history", "基础冲突解决"], ["独立完成 branch → commit → merge → push", "能查看历史并解决基础冲突"], 1),
+    makeTask(2, "现代前端开发环境", "能启动、安装依赖并基本排查现代前端项目。", ["Node.js", "npm / package.json / scripts", "Vite / 目录结构", "环境变量"], ["能安装依赖并运行项目", "能解释 npm scripts 与环境变量边界"], 1),
+  ]),
+  makePart(2, "JavaScript 强化", "不从零重学，以查漏补缺和读懂真实业务代码为主。", "能阅读常见业务代码，并解释浏览器到后端的数据链路。", [
+    makeTask(3, "JavaScript 核心", "补齐作用域、数据处理、异步与执行机制。", ["作用域 / 闭包 / this", "对象 / 数组 / 模块", "Promise / async await", "异常处理 / Event Loop"], ["能解释主要执行流程", "能排查常见异步错误"]),
+    makeTask(4, "Web 与浏览器基础", "能解释浏览器、HTTP、后端与页面之间的数据流。", ["DNS / HTTP", "请求 / 响应 / 状态码 / Header", "Cookie / Storage", "Fetch / CORS / JSON"], ["能讲清浏览器 → 请求 → 后端 → 响应 → 页面", "能用 Network 面板定位问题"], 1),
+  ]),
+  makePart(3, "TypeScript + React", "建立组件、状态与数据流的核心心智，而不是背 API。", "独立完成一个中小型 React + TypeScript Web 应用。", [
+    makeTask(5, "TypeScript", "能读写 React 项目中的常见类型代码。", ["基础类型", "interface / type", "联合类型", "函数 / 对象类型", "类型推断 / 泛型基础"], ["能为 Props 和接口数据建模", "常见代码不依赖 any"]),
+    makeTask(6, "React 核心", "理解数据变化如何驱动状态、渲染与 UI 更新。", ["Component / JSX / Props / State", "事件 / 条件 / 列表 / 表单", "常用 Hooks", "Router / API / 状态管理"], ["能独立拆分组件", "能解释状态更新到 UI 的过程"]),
+  ]),
+  makePart(4, "第一个自主项目", "做一个规模适中、真正由自己掌控的 Web 项目。", "交付一个可部署、可演示、可修改的 React + TypeScript 项目。", [
+    makeTask(7, "完成一个真正掌控的小型 Web 项目", "获得第一份实习简历的基础项目候选。", ["Router / 状态 / API / 表单", "搜索 / 筛选等真实功能", "Git 管理", "部署"], ["核心代码能阅读、修改和 Debug", "能解释主要数据流", "项目可在线访问"], 3),
+  ]),
+  makePart(5, "全栈能力", "使用 Python、FastAPI 和 PostgreSQL 打通完整数据链路。", "完成带持久化、基础鉴权和错误处理的全栈功能。", [
+    makeTask(8, "Python 基础", "掌握服务于 FastAPI 和 Agent 开发的 Python 基础。", ["语法 / list / dict", "函数 / class / 模块", "异常 / pip / 虚拟环境", "async / 类型标注"], ["能组织小型 Python 模块", "会使用虚拟环境与依赖"]),
+    makeTask(9, "FastAPI", "能实现 API 并与 React 联调。", ["Router / GET / POST", "参数 / JSON / Response", "错误 / Middleware", "前后端联调"], ["接口职责和错误响应清晰", "能解释完整请求链路"]),
+    makeTask(10, "数据库与 PostgreSQL", "能为 Web 项目设计基本关系数据库。", ["SQL / CRUD", "表 / 主键 / 外键", "JOIN / 索引", "事务基础"], ["能设计基本表结构", "会写常见 CRUD 与 JOIN"]),
+    makeTask(11, "完成一个真正的全栈功能", "打通 React、FastAPI 与 PostgreSQL。", ["用户数据 / CRUD", "持久化", "基础鉴权", "错误处理 / 联调"], ["数据刷新后保留", "鉴权和错误边界可验证", "完整链路可解释"], 3),
+  ]),
+  makePart(6, "AI 应用开发", "从安全调用模型开始，逐步理解流式输出、工具、RAG 与 Agent。", "实现并解释一个最小可运行的 AI Web 应用。", [
+    makeTask(12, "LLM API", "理解 Web 应用如何安全调用大模型。", ["Prompt / Message / Context", "Token / Temperature", "Structured Output", "API Key / 成本"], ["密钥不进入前端和仓库", "理解上下文与成本"]),
+    makeTask(13, "Streaming + SSE", "实现可中断、可反馈状态的流式 AI 界面。", ["LLM → FastAPI → SSE → React", "Loading / Error / 中断", "Streaming UI"], ["内容可逐步显示", "能处理错误与中断"]),
+    makeTask(14, "Tool Calling", "让模型通过受控工具获取真实数据或执行任务。", ["Tool Schema", "参数与返回值", "真实工具", "安全边界"], ["至少实现两个真实工具", "输入校验且权限明确"]),
+    makeTask(15, "RAG", "完成文档切分、检索到回答的最小流程。", ["切分 / Embedding", "Vector Database", "Retrieval / Context"], ["最小 RAG 可运行", "能解释检索错误为何影响回答"]),
+    makeTask(16, "Agent 基础", "先理解底层循环，再按需要学习框架。", ["Agent Loop / Workflow", "State / Context / Memory", "Tool / Human-in-the-loop", "基础 Evals / MCP / LangGraph"], ["能画出 Agent 工作流", "能用基础 Evals 验证效果"]),
+  ]),
+  makePart(7, "AI 全栈项目", "随着能力提升，逐步接管“你赢历险记”的对应模块。", "让项目从 AI 生成的工具成长为自己理解并参与核心开发的 AI 全栈项目。", [
+    makeTask(17, "逐步接管「你赢历险记」", "按已掌握技术逐步阅读、修改并接管项目。", ["React 模块", "FastAPI 接口", "PostgreSQL 数据", "AI 导师 / RAG / Tool"], ["每个阶段完成一次真实修改", "达到可讲标准后再作为简历核心项目"], 3),
+  ]),
+  makePart(8, "工程化与上线", "让项目拥有真实地址、清晰文档和可信开发记录。", "核心项目可被招聘者运行、访问和理解。", [
+    makeTask(18, "项目部署", "让前端、后端和数据库拥有真实可访问环境。", ["前端 / 后端 / PostgreSQL 部署", "环境变量 / HTTPS", "Docker 基础"], ["线上地址可访问", "敏感配置安全"]),
+    makeTask(19, "GitHub 项目整理", "让项目背景、功能、架构和运行方式清晰可信。", ["README / 截图 / 技术栈", "架构 / 数据流", "本地运行 / Demo", "真实 Commit"], ["陌生人可按文档运行", "提交历史反映真实开发"]),
+  ]),
+  makePart(9, "面试准备", "在项目学习过程中同步整理，不一次性死背全部题目。", "能接受对基础、项目和 AI Coding 过程的连续追问。", [
+    makeTask(20, "前端基础面试", "逐步整理开发与面试真正需要的前端基础。", ["HTML / CSS", "JavaScript / TypeScript", "React", "浏览器 / HTTP / Git"], ["能结合项目举例", "薄弱点可转成支线任务"]),
+    makeTask(21, "项目面试", "能讲清架构、数据流、AI 模块、Bug 与个人决策。", ["技术选型 / 架构 / 数据库", "状态 / SSE / Tool / RAG / Agent", "Debug / AI Coding / 成本"], ["简历技术都能接受追问", "能说明个人贡献与 Debug 过程"]),
+  ]),
+  makePart(10, "简历与实习", "准备可投递材料，并在反馈循环中持续改进。", "最终 Boss：获得第一份开发实习 Offer。", [
+    makeTask(22, "完成简历 V1", "面向前端、AI 前端、Web 全栈和 AI 应用岗位准备简历。", ["技术能力", "自主项目", "你赢历险记", "算法与教育背景"], ["每项技能都有证据", "项目描述真实可追问"], 3),
+    makeTask(23, "真实投递", "尽早开始广州开发实习投递，用反馈驱动成长。", ["投递 → 笔试 / 面试", "记录问题 → 支线任务", "补知识 → 改简历 → 继续投递"], ["建立持续投递节奏", "不等待全部学完才开始"], 3),
+  ]),
 ];
+
+export const SIDE_QUESTS: SideQuest[] = [
+  { id: "side-git", title: "Git 实战", description: "在真实项目中持续练习，不要求按顺序完成。", topics: ["分支与合并", "Commit 质量", "冲突处理"] },
+  { id: "side-web", title: "HTTP 与浏览器", description: "遇到请求问题时结合 Network 面板补齐知识。", topics: ["HTTP", "浏览器", "前后端通信"] },
+  { id: "side-cs", title: "计算机基础", description: "跟随学校课程和项目需要逐步积累。", topics: ["数据结构", "数据库", "计算机网络", "操作系统"] },
+  { id: "side-reading", title: "项目阅读与接管", description: "阅读对应模块并完成真实修改。", topics: ["代码阅读", "数据流", "Debug", "模块接管"] },
+  { id: "side-ai", title: "AI Coding", description: "练习理解、判断、修改、Debug、解释与验证。", topics: ["Review", "Debug", "验证", "安全边界"] },
+];
+
 export function partDone(doneIds: string[], part: Part) { return part.items.every((item) => doneIds.includes(item.id)); }
 export function findItem(id: string) { for (const part of PLAN) { const item = part.items.find((entry) => entry.id === id); if (item) return { partTitle: part.title, itemTitle: item.title }; } }

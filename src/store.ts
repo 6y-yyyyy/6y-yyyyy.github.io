@@ -58,7 +58,7 @@ export function useStore() {
       const now = Date.now();
       setLog((records) => [
         ...records.filter((record) => record.itemId !== itemId),
-        { id: `${itemId}-${now}`, itemId, partTitle: "每日打怪", itemTitle: `今天上${platform}打怪`, doneAt: now },
+        { id: `${itemId}-${now}`, itemId, partTitle: "每周悬赏", itemTitle: `在${platform}完成算法练习`, doneAt: now },
       ]);
       lightUpToday();
     } else {

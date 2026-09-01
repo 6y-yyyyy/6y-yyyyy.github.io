@@ -11,6 +11,7 @@ import "./card-content.css";
 import "./workflow.css";
 import "./dashboard-layout.css";
 import "./memory-detail.css";
+import "./mobile-responsive.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

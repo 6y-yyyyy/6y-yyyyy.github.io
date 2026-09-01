@@ -1,33 +1,14 @@
 import { useState } from "react";
-import { Button, Card, Tag } from "antd";
-import { CheckOutlined, CodeOutlined, FireOutlined, RocketOutlined } from "@ant-design/icons";
-import { todayStr, useStore } from "../store";
-
-const KEY = "study_tracker_algorithm_days";
-type Platform = "力扣" | "牛客";
-const readDays = (): string[] => { try { return JSON.parse(localStorage.getItem(KEY) || "[]"); } catch { return []; } };
-const arenas: { name: Platform; line: string; note: string; url: string; className: string; icon: React.ReactNode }[] = [
-  { name: "力扣", line: "今天上力扣打怪", note: "适合按题型训练与巩固数据结构", url: "https://leetcode.cn/problemset/", className: "leetcode", icon: <CodeOutlined /> },
-  { name: "牛客", line: "今天上牛客打怪", note: "适合刷企业真题与准备笔面试", url: "https://www.nowcoder.com/exam/oj", className: "nowcoder", icon: <RocketOutlined /> },
-];
-
-export default function DailyChallengePage() {
-  const [days, setDays] = useState<string[]>(readDays);
-  const [platform, setPlatform] = useState<Platform>("力扣");
-  const { recordAlgorithmChallenge } = useStore();
-  const date = todayStr();
-  const done = days.includes(date);
-
-  const markDone = () => {
-    const next = done ? days.filter((day) => day !== date) : [...days, date];
-    setDays(next);
-    localStorage.setItem(KEY, JSON.stringify(next));
-    recordAlgorithmChallenge(platform, !done);
-  };
-
-  return <main className="page-shell challenge-page">
-    <section className="challenge-hero"><div><span className="eyebrow">DAILY SIDE QUEST</span><h1>今天也去打一个怪</h1><p>主线练项目，支线练基本功。每天一道就够，关键是别断线。</p></div><div className="streak-orb"><FireOutlined /><strong>{days.length}</strong><span>累计打怪天数</span></div></section>
-    <div className="daily-goal"><div><strong>{done ? "今日支线已完成" : `今日支线：去${platform}至少完成 1 题`}</strong><p>{done ? `“今天上${platform}打怪”已加入战绩。` : "点击下方卡片选择战场，独立思考 20 分钟后再看题解。"}</p></div><Button type={done ? "default" : "primary"} size="large" icon={<CheckOutlined />} onClick={markDone}>{done ? "取消今日记录" : "今日已打怪"}</Button></div>
-    <div className="arena-grid">{arenas.map((arena) => <a className={`arena-card ${arena.className} ${platform === arena.name ? "is-selected" : ""}`} key={arena.name} href={arena.url} target="_blank" rel="noreferrer" onClick={() => setPlatform(arena.name)}><Card><div className="arena-icon">{arena.icon}</div><Tag>{platform === arena.name ? `已选择 · ${arena.name}` : arena.name}</Tag><h2>{arena.line}</h2><p>{arena.note}</p><span className="enter-arena">进入战场 →</span></Card></a>)}</div>
-  </main>;
-}
+import { Button, Card, Progress, Tag } from "antd";
+import { CheckOutlined, CodeOutlined, FireOutlined, MinusOutlined, RocketOutlined } from "@ant-design/icons";
+import { useStore } from "../store";
+const KEY="study_tracker_weekly_algorithm", LEGACY_KEY="study_tracker_algorithm_days", TARGET=5;
+type Platform="力扣"|"牛客"; type WeeklyRecord={week:string;count:number};
+const weekKey=()=>{const d=new Date(),day=d.getDay()||7;d.setHours(0,0,0,0);d.setDate(d.getDate()-day+1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`};
+const readRecord=():WeeklyRecord=>{const week=weekKey();try{const saved=JSON.parse(localStorage.getItem(KEY)||"null") as WeeklyRecord|null;if(saved?.week===week)return saved}catch{}try{const days=JSON.parse(localStorage.getItem(LEGACY_KEY)||"[]") as string[];return{week,count:days.filter(day=>day>=week).length}}catch{return{week,count:0}}};
+const arenas=[{name:"力扣" as Platform,note:"按题型训练与巩固数据结构",url:"https://leetcode.cn/problemset/",className:"leetcode",icon:<CodeOutlined/>},{name:"牛客" as Platform,note:"练习企业真题与笔面试题",url:"https://www.nowcoder.com/exam/oj",className:"nowcoder",icon:<RocketOutlined/>}];
+export default function DailyChallengePage(){const[record,setRecord]=useState<WeeklyRecord>(readRecord);const[platform,setPlatform]=useState<Platform>("力扣");const{recordAlgorithmChallenge}=useStore();const update=(delta:number)=>{const next={week:weekKey(),count:Math.max(0,record.count+delta)};setRecord(next);localStorage.setItem(KEY,JSON.stringify(next));recordAlgorithmChallenge(platform,delta>0)};const complete=record.count>=TARGET;return <main className="page-shell challenge-page">
+  <section className="challenge-hero"><div><span className="eyebrow">WEEKLY BOUNTY</span><h1>本周算法 5 题</h1><p>按周累计，自由安排。忙一天不会逾期，也没有连续打卡压力。</p></div><div className="streak-orb"><FireOutlined/><strong>{record.count}</strong><span>本周完成题数</span></div></section>
+  <div className="daily-goal"><div><strong>{complete?"本周悬赏已完成，可以自由加练":`距离悬赏完成还有 ${TARGET-record.count} 题`}</strong><Progress percent={Math.min(100,Math.round(record.count/TARGET*100))} showInfo={false}/><p>建议顺序：数组 / 字符串 → 哈希 → 双指针 → 链表 → 栈 / 队列 → 二分 → 树 → DFS / BFS → 基础动态规划。</p></div><div className="bounty-actions"><Button icon={<MinusOutlined/>} disabled={record.count===0} onClick={()=>update(-1)}>撤销 1 题</Button><Button type="primary" icon={<CheckOutlined/>} onClick={()=>update(1)}>记录完成 1 题</Button></div></div>
+  <div className="arena-grid">{arenas.map(a=><a className={`arena-card ${a.className} ${platform===a.name?"is-selected":""}`} key={a.name} href={a.url} target="_blank" rel="noreferrer" onClick={()=>setPlatform(a.name)}><Card><div className="arena-icon">{a.icon}</div><Tag>{platform===a.name?`已选择 · ${a.name}`:a.name}</Tag><h2>去{a.name}练习</h2><p>{a.note}</p><span className="enter-arena">进入战场 →</span></Card></a>)}</div>
+</main>}

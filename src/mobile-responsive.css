@@ -1,0 +1,67 @@
+/* Narrow-phone overrides: designed around the iPhone 16 Pro 393px CSS viewport. */
+html, body, #root { max-width: 100%; overflow-x: hidden; }
+.page-shell, .ant-layout, .ant-layout-content, .ant-card, .ant-card-body { min-width: 0; }
+.resource-links a, .intel-block, .mission-title, .roadmap-copy { overflow-wrap: anywhere; word-break: break-word; }
+
+@media (max-width: 430px) {
+  .mobile-header {
+    height: calc(54px + env(safe-area-inset-top));
+    padding: calc(8px + env(safe-area-inset-top)) 12px 8px;
+  }
+
+  .ant-layout-content {
+    padding: calc(66px + env(safe-area-inset-top)) 12px calc(24px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .dashboard-hero, .section-heading, .hero-card, .challenge-hero {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 20px 16px;
+  }
+
+  .dashboard-hero .ant-progress-circle,
+  .challenge-hero .streak-orb {
+    align-self: center;
+  }
+
+  .dashboard-hero h1, .hero-card h1, .roadmap-header h1, .challenge-hero h1 {
+    font-size: 28px;
+    overflow-wrap: anywhere;
+  }
+
+  .today-card .ant-card-body, .mission-card .ant-card-body,
+  .roadmap-card .ant-card-body, .boss-card .ant-card-body,
+  .side-quest-grid .ant-card-body { padding: 16px; }
+
+  .mission-head {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .mission-head .mission-title { min-width: 0; }
+  .mission-head > .ant-tag { grid-column: 2; width: fit-content; max-width: 100%; margin-inline-end: 0; white-space: normal; }
+  .mission-head > .ant-tag + .ant-tag { margin-top: -4px; }
+
+  .detail-grid, .boss-grid, .side-quest-grid { grid-template-columns: minmax(0, 1fr); }
+  .intel-block { padding: 13px; }
+  .intel-block ol, .intel-block ul, .boss-grid ol, .boss-grid ul { padding-left: 20px; }
+  .resource-links a { display: block; line-height: 1.55; padding: 5px 0; }
+
+  .roadmap-header { padding: 20px 16px; }
+  .roadmap-card .ant-card-body { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 10px; }
+  .roadmap-card .ant-progress { grid-column: 1 / -1; justify-self: center; margin-left: 0; }
+  .roadmap-title { align-items: flex-start; flex-wrap: wrap; }
+  .roadmap-title h2 { width: 100%; }
+
+  .daily-goal { padding: 16px; }
+  .bounty-actions { display: grid; grid-template-columns: 1fr; width: 100%; }
+  .bounty-actions .ant-btn { width: 100%; }
+  .arena-grid { grid-template-columns: minmax(0, 1fr); }
+
+  .quick-links { width: 100%; }
+  .quick-links .ant-btn { width: 100%; height: auto; min-height: 32px; white-space: normal; }
+  .stage-select { max-width: 100%; }
+  .project-workflow > div { grid-template-columns: 1fr; }
+}

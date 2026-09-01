@@ -27,9 +27,9 @@ const { Sider, Content } = Layout;
 type AdventurePageKey = "dashboard" | "current" | "challenge" | "memory" | "bestiary" | "showcase" | "overall" | "contributions" | "completed";
 type PageKey = AdventurePageKey | "schedule" | "academic-calendar";
 const MENU_ITEMS = [
-  { key: "dashboard", icon: <HomeOutlined />, label: "今日冒险" },
+  { key: "dashboard", icon: <HomeOutlined />, label: "冒险首页" },
   { key: "current", icon: <TbSwords />, label: "主线任务" },
-  { key: "challenge", icon: <FireOutlined />, label: "每日打怪" },
+  { key: "challenge", icon: <FireOutlined />, label: "每周悬赏" },
   { key: "memory", icon: <DatabaseOutlined />, label: "专属记忆库" },
   { key: "bestiary", icon: <BugOutlined />, label: "怪物图鉴" },
   { key: "showcase", icon: <ProjectOutlined />, label: "作品陈列柜" },
