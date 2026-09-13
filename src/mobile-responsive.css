@@ -64,4 +64,18 @@ html, body, #root { max-width: 100%; overflow-x: hidden; }
   .quick-links .ant-btn { width: 100%; height: auto; min-height: 32px; white-space: normal; }
   .stage-select { max-width: 100%; }
   .project-workflow > div { grid-template-columns: 1fr; }
+
+  .mission-study-actions, .calendar-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .mission-study-actions .ant-btn, .calendar-heading .ant-btn {
+    width: 100%;
+  }
+
+  .ant-modal {
+    max-width: calc(100vw - 24px);
+    margin: 12px auto;
+  }
 }
